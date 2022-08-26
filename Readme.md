@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Mykhailo Movchan](https://up.htmlacademy.ru/ecmascript/18/user/1044579).
-* Наставник: `Неизвестно`.
+* Наставник: [Михаил Кислый](https://htmlacademy.ru/profile/smart-grizzly).
 
 ---
 

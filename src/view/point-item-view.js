@@ -40,7 +40,7 @@ const createPointsListTemplate = () => (
   </li>`
 );
 
-export default class PointsListView {
+export default class PointItemView {
   getTemplate() {
     return createPointsListTemplate();
   }

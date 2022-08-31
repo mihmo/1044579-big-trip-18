@@ -1,0 +1,1 @@
+export const POINTLIST_ITEMS_NUMBER = 3;

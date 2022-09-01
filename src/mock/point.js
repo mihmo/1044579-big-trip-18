@@ -20,13 +20,13 @@ const generatePointDestination = () => {
 
 const generatePoint = () => ({
   basePrice: 100,
-  dateFrom: '2022-09-10T22:55:56.845Z',
-  dateTo: '2022-09-11T11:22:13.375Z',
+  dateFrom: '2022-09-10T09:00:00.000Z',
+  dateTo: '2022-09-10T22:00:00.500Z',
   destination: generatePointDestination(), //$Destination.id$,
   id: '0',
   isFavorite: false,
   offers: null, //$Array<Offer.id>$,
-  type: 'flight'
+  type: 'bus'
 });
 
 export { generatePoint };

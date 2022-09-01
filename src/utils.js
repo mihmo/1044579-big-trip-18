@@ -1,5 +1,7 @@
+import dayjs from 'dayjs';
+
 // функция проверяет, что введенные данные >= 0
-const checkNumbers = (min, max)  => !!((min >= 0 && max >= 0));
+const checkNumbers = (min, max) => !!((min >= 0 && max >= 0));
 
 // функцию скопировал: https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 const getRandomIntInclusive = (a, b) => {
@@ -14,4 +16,20 @@ const declOfNumbers = (number, words) => words[(number % 100 > 4 && number % 100
 
 const isEscapeKey = (evt) => (evt.keyCode === 27);
 
-export { getRandomIntInclusive, declOfNumbers, isEscapeKey };
+const humanizePointDate = (date) => dayjs(date).format('DD MMM');
+
+const humanizePointTime = (date) => dayjs(date).format('HH:mm');
+
+const humanizeTimeSpent = (dateFrom, dateTo) => {
+  const minutesSpent = dayjs(dateTo).diff(dateFrom, 'minute');
+  const hoursSpent = Math.floor(minutesSpent / 60);
+  const minSpent = minutesSpent % 60;
+
+  if (hoursSpent) {
+    return `${hoursSpent}H ${minSpent}`;
+  } else {
+    return minSpent;
+  }
+};
+
+export { getRandomIntInclusive, declOfNumbers, isEscapeKey, humanizePointDate, humanizePointTime, humanizeTimeSpent };

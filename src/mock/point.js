@@ -26,7 +26,7 @@ const generatePoint = () => ({
   id: '0',
   isFavorite: false,
   offers: null, //$Array<Offer.id>$,
-  type: 'bus'
+  type: 'train'
 });
 
 export { generatePoint };

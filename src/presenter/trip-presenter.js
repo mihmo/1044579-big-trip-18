@@ -12,7 +12,7 @@ export default class TripPresenter {
     this.eventsContainer = eventsContainer;
     this.pointsModel = pointsModel;
     this.eventsPoints = [...this.pointsModel.getPoints()];
-    console.log(this.eventsPoints);
+    // console.log(this.eventsPoints);
 
     render(new SortView(), this.eventsContainer);
     render(this.eventContainerComponent, this.eventsContainer);

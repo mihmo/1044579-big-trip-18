@@ -22,14 +22,19 @@ const humanizePointTime = (date) => dayjs(date).format('HH:mm');
 
 const humanizeTimeSpent = (dateFrom, dateTo) => {
   const minutesSpent = dayjs(dateTo).diff(dateFrom, 'minute');
+  const daysSpent = Math.floor(minutesSpent / 1440);
   const hoursSpent = Math.floor(minutesSpent / 60);
   const minSpent = minutesSpent % 60;
 
-  if (hoursSpent) {
+  if (daysSpent) {
+    return `${daysSpent}D ${Math.floor(hoursSpent%24)}H ${minSpent}`;
+  } else if (hoursSpent) {
     return `${hoursSpent}H ${minSpent}`;
   } else {
     return minSpent;
   }
 };
 
-export { getRandomIntInclusive, declOfNumbers, isEscapeKey, humanizePointDate, humanizePointTime, humanizeTimeSpent };
+const isEventExpired = (eventDate) => eventDate && dayjs().isAfter(eventDate, 'D');
+
+export { getRandomIntInclusive, declOfNumbers, isEscapeKey, humanizePointDate, humanizePointTime, humanizeTimeSpent, isEventExpired };

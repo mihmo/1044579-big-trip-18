@@ -1,16 +1,16 @@
 import {getRandomIntInclusive} from '../utils.js';
 
-const generatePointDescription = () => {
-  const descriptions = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed nisi sed augue convallis suscipit in sed felis.',
-    'Cras aliquet varius magna, non porta ligula feugiat eget.',
-    'Fusce tristique felis at fermentum pharetra. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
-    'Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
-    'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
-  ];
-  const randomIndex = getRandomIntInclusive(0, descriptions.length - 1);
-  return descriptions[randomIndex];
-};
+// const generatePointDescription = () => {
+//   const descriptions = [
+//     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed nisi sed augue convallis suscipit in sed felis.',
+//     'Cras aliquet varius magna, non porta ligula feugiat eget.',
+//     'Fusce tristique felis at fermentum pharetra. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
+//     'Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
+//     'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
+//   ];
+//   const randomIndex = getRandomIntInclusive(0, descriptions.length - 1);
+//   return descriptions[randomIndex];
+// };
 
 const generatePointDestination = () => {
   const destinations = ['Chamonix', 'Geneva', 'Amsterdam', 'Bratislava', 'London'];

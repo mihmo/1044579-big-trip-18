@@ -27,7 +27,7 @@ const humanizeTimeSpent = (dateFrom, dateTo) => {
   const minSpent = minutesSpent % 60;
 
   if (daysSpent) {
-    return `${daysSpent}D ${Math.floor(hoursSpent%24)}H ${minSpent}`;
+    return `${daysSpent}D ${Math.floor(hoursSpent % 24)}H ${minSpent}`;
   } else if (hoursSpent) {
     return `${hoursSpent}H ${minSpent}`;
   } else {

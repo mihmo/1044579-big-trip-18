@@ -1,1 +1,1 @@
-export const POINTLIST_ITEMS_NUMBER = 3;
+export const POINTLIST_ITEMS_NUMBER = 2;

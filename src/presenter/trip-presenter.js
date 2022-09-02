@@ -17,9 +17,9 @@ export default class TripPresenter {
     render(new SortView(), this.eventsContainer);
     render(this.eventContainerComponent, this.eventsContainer);
     render(new PointItemView(this.eventsPoints[0]), this.eventContainerComponent.getElement());
-    render(new PointEditView(), this.eventContainerComponent.getElement());
+    render(new PointEditView(this.eventsPoints[0]), this.eventContainerComponent.getElement());
 
-    for (let i = 0; i < this.eventsPoints.length; i++) {
+    for (let i = 1; i < this.eventsPoints.length; i++) {
       render(new PointItemView(this.eventsPoints[i]), this.eventContainerComponent.getElement());
     }
 

@@ -2,13 +2,27 @@
 import { createElement } from '../render.js';
 import { humanizePointFullTime } from '../utils.js';
 import { POINT_TYPES } from '../setup.js';
+import { generatePointDescription } from '../mock/point.js';
+import { bigTripOffers } from '../mock/point.js';
 
 const createPointEditSelectTypeTemplate = (currentType) => POINT_TYPES.map((type) =>
   `<div class="event__type-item">
-  <input id="event-type-${type}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
-  <label class="event__type-label  event__type-label--${type}" for="event-type-${type}">${type}</label>
-</div>`
+    <input id="event-type-${type}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
+    <label class="event__type-label  event__type-label--${type}" for="event-type-${type}">${type}</label>
+  </div>`
 ).join('');
+
+const createPointAddOfferTemplate = (id) => ( /* TODO Не понимаю как тут правильно замапить ID и сопоставить их с ТочкойМаршрута*/
+  `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
+    <label class="event__offer-label" for="event-offer-luggage-1">
+      <span class="event__offer-title">${bigTripOffers[0].offers[0].title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${bigTripOffers[0].offers[0].price}</span>
+    </label>
+  </div>`
+);
+
 
 const createPointEditTemplate = (point = {}) => {
   const {
@@ -17,11 +31,13 @@ const createPointEditTemplate = (point = {}) => {
     dateTo = '2022-01-01T10:30:00.000Z',
     destination = 'London',
     id = '0',
-    offers = null,
+    offers = 1,
     type = 'taxi'
   } = point;
 
   const selectTypeTemplate = createPointEditSelectTypeTemplate(type);
+  const pointAddOfferTemplate = createPointAddOfferTemplate(bigTripOffers);
+  const pointDescription = generatePointDescription();
 
   return (
     `<li class="trip-events__item">
@@ -81,14 +97,7 @@ const createPointEditTemplate = (point = {}) => {
             <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
             <div class="event__available-offers">
-              <div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-                <label class="event__offer-label" for="event-offer-luggage-1">
-                  <span class="event__offer-title">Add luggage</span>
-                  &plus;&euro;&nbsp;
-                  <span class="event__offer-price">50</span>
-                </label>
-              </div>
+              ${pointAddOfferTemplate}
 
               <div class="event__offer-selector">
                 <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
@@ -130,7 +139,7 @@ const createPointEditTemplate = (point = {}) => {
 
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">Chamonix-Mont-Blanc (usually shortened to Chamonix) is a resort area near the junction of France, Switzerland and Italy. At the base of Mont Blanc, the highest summit in the Alps, it's renowned for its skiing.</p>
+            <p class="event__destination-description">${pointDescription}</p>
           </section>
         </section>
       </form>

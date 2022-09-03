@@ -5,4 +5,7 @@ export default class PointsModel {
   points = Array.from({length: POINTLIST_ITEMS_NUMBER}, generatePoint);
 
   getPoints = () => this.points;
+
+  // getDestinations = () => this.destinations;
+  // getOptions = () => this.options;
 }

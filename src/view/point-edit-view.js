@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { createElement } from '../render.js';
 import { humanizePointFullTime } from '../utils.js';
-import { POINT_TYPES } from '../setup.js';
-import { generatePointDescription } from '../mock/point.js';
-import { bigTripOffers } from '../mock/point.js';
+import { POINT_TYPES } from '../mock/setup.js';
+import { createPointDestinations } from '../mock/destination';
+import { bigTripOffers } from '../mock/offer.js';
 
 const createPointEditSelectTypeTemplate = (currentType) => POINT_TYPES.map((type) =>
   `<div class="event__type-item">
@@ -16,9 +16,9 @@ const createPointAddOfferTemplate = (id) => ( /* TODO Не понимаю как
   `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
     <label class="event__offer-label" for="event-offer-luggage-1">
-      <span class="event__offer-title">${bigTripOffers[0].offers[0].title}</span>
+      <span class="event__offer-title">${bigTripOffers[0].offers.title}</span>
       &plus;&euro;&nbsp;
-      <span class="event__offer-price">${bigTripOffers[0].offers[0].price}</span>
+      <span class="event__offer-price">${bigTripOffers[0].offers.price}</span>
     </label>
   </div>`
 );
@@ -37,7 +37,7 @@ const createPointEditTemplate = (point = {}) => {
 
   const selectTypeTemplate = createPointEditSelectTypeTemplate(type);
   const pointAddOfferTemplate = createPointAddOfferTemplate(bigTripOffers);
-  const pointDescription = generatePointDescription();
+  // const pointDescription = generatePointDescription();
 
   return (
     `<li class="trip-events__item">
@@ -139,7 +139,7 @@ const createPointEditTemplate = (point = {}) => {
 
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${pointDescription}</p>
+            <p class="event__destination-description">${createPointDestinations[0].description}</p>
           </section>
         </section>
       </form>

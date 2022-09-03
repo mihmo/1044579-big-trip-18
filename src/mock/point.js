@@ -1,42 +1,6 @@
 import dayjs from 'dayjs';
-import {getRandomIntInclusive} from '../utils.js';
-import { POINT_TYPES } from '../setup.js';
-
-const bigTripOffers = [{
-  type: 'taxi',
-  offers: [{
-    id: 1,
-    title: 'Order Uber!',
-    price: 25
-  }, {
-    id: 2,
-    title: 'Choose the radio station',
-    price: 10
-  }]
-}, {
-  type: 'flight',
-  offers: [{
-    id: 3,
-    title: 'Switch to comfort',
-    price: 80
-  }, {
-    id: 4,
-    title: 'Add luggage',
-    price: 50
-  }]
-}];
-
-const generatePointDescription = () => {
-  const descriptions = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed nisi sed augue convallis suscipit in sed felis.',
-    'Cras aliquet varius magna, non porta ligula feugiat eget.',
-    'Fusce tristique felis at fermentum pharetra. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
-    'Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
-    'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
-  ];
-  const randomIndex = getRandomIntInclusive(0, descriptions.length - 1);
-  return descriptions[randomIndex];
-};
+import { getRandomIntInclusive } from '../utils.js';
+import { POINT_TYPES, DATE_MINUTES_RANDOMIZER, MIN_POINT_PRICE, MAX_POINT_PRICE, POINT_PRICE_MULTIPLIER, MIN_OFFERS, MAX_OFFERS } from './setup.js';
 
 const generatePointType = () => {
   const randomIndex = getRandomIntInclusive(0, POINT_TYPES.length - 1);
@@ -52,63 +16,57 @@ const generatePointDestination = () => {
 
 const generateDate = () => {
 
-  const maxDaysGap = 7 * 24 * 60; // 10080 минут, это моковые данные, я их все равно буду удалять, поэтому пока прям тут
+  const maxDaysGap = DATE_MINUTES_RANDOMIZER;
   const daysGap = getRandomIntInclusive(-maxDaysGap, maxDaysGap);
 
   return dayjs().add(daysGap, 'minutes').toDate();
 };
 
-const generatePointPrice = () => getRandomIntInclusive(10, 150) * 10; // цена от 100 - 1500 с шагом 10
+const generatePointPrice = () => getRandomIntInclusive(MIN_POINT_PRICE, MAX_POINT_PRICE) * POINT_PRICE_MULTIPLIER; // цена от 100 - 1500 с шагом 10
+
+let pointId = 0;
+const generatePointId = () => {
+  pointId++;
+  return `${String(pointId).padStart(3,'0')}`;
+};
+
+const createRandomIdFromRange = (min, max) => {
+  const previousValues = [];
+  return function () {
+    let currentValue = getRandomIntInclusive(min, max);
+    if (previousValues.length >= (max - min + 1)) {
+      // console.error(`Перебраны все ID из диапазона от ${ min } до ${ max }`);
+      return null;
+    }
+    while (previousValues.includes(currentValue)) {
+      currentValue = getRandomIntInclusive(min, max);
+    }
+    previousValues.push(currentValue);
+    return currentValue;
+  };
+};
+
 
 const generatePoint = () => {
   const dateFrom = generateDate();
   const dateTo = generateDate();
+  const generateUniqueId = createRandomIdFromRange(MIN_OFFERS, MAX_OFFERS);
 
   return {
     basePrice: generatePointPrice(),
     dateFrom,
     dateTo,
-    destination: generatePointDestination(), //$Destination.id$,
-    id: '0',
+    destination: generatePointDestination(),
+    id: generatePointId(),
     isFavorite: false,
-    offers: [1, 2, 3],//null, //$Array<Offer.id>$,
+    offers: Array.from({length: getRandomIntInclusive(MIN_OFFERS, MAX_OFFERS)}, () => generateUniqueId()), //создаем рандомный массив рандомных ИД оферов
     type: generatePointType()
   };
 };
 
-export { generatePoint, generatePointDescription, bigTripOffers };
+export { generatePoint, generatePointType };
 
-/* TODO Заведите структуру данных:
-Заведите структуру данных, которая опишет точку маршрута:
--  её тип; Taxi, Bus, Train, Ship, Drive, Flight, Check-in, Sightseeing, Restaurant
--  пункт назначения;
--  дополнительные опции;
--  и так далее... Что должно быть в структуре, можно узнать из технического задания.
-
-Destination:
-{
-  "id": 1,
-  "description": "Chamonix, is a beautiful city, a true asian pearl, with crowded streets.",
-  "name": "Chamonix",
-  "pictures": [
-    {
-      "src": "http://picsum.photos/300/200?r=0.0762563005163317",
-      "description": "Chamonix parliament building"
-    }
-  ]
-}
-Offer
-{
-  "id": 1,
-  "title": "Upgrade to a business class",
-  "price": 120
-}
-
-OffersByType:
-{
-  "type": "taxi",
-  "offers": $Array<Offer>$
-}
+/*
 
 Point:
 {

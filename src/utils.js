@@ -34,6 +34,8 @@ const humanizeTimeSpent = (dateFrom, dateTo) => {
   }
 };
 
+const convertMinutesToTime = (minutes) => dayjs.duration(minutes, 'minutes').format('D[d] H[h] mm[m]');
+
 const isEventExpired = (eventDate) => eventDate && dayjs().isAfter(eventDate, 'D');
 
-export { getRandomIntInclusive, declOfNumbers, isEscapeKey, humanizePointDate, humanizePointTime, humanizePointFullTime, humanizeTimeSpent, isEventExpired };
+export { getRandomIntInclusive, declOfNumbers, isEscapeKey, humanizePointDate, humanizePointTime, humanizePointFullTime, humanizeTimeSpent, convertMinutesToTime, isEventExpired };

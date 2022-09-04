@@ -36,7 +36,7 @@ const generatePointOffer = () => ({
 });
 
 const generatePointOffers = Array.from({length: getRandomIntInclusive(MIN_OFFERS, MAX_OFFERS)}, generatePointOffer);
-console.log(generatePointOffers);
+// console.log(generatePointOffers);
 // Дебажить удобнее на статических данных, поэтому пока это тут оставлю.
 
 //   type: 'taxi',

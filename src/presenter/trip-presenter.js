@@ -19,13 +19,13 @@ export default class TripPresenter {
     render(new SortView(), this.eventsContainer);
     render(this.eventContainerComponent, this.eventsContainer);
     render(new PointItemView(this.eventsPoints[0]), this.eventContainerComponent.getElement());
-    console.log('Point Offers: ' + this.eventsPoints[0].offers); // временно оставил для дебага.
+    // console.log('Point Offers: ' + this.eventsPoints[0].offers); // временно оставил для дебага.
 
     const offers = [...this.offersModel.get(this.eventsPoints[0])];
     // console.log(this.eventsPoints[0].offers); // временно оставил для дебага.
     // console.log(this.offersModel.get()); // временно оставил для дебага.
     const destinations = [...this.destinationsModel.get(this.eventsPoints[0])];
-    console.log(destinations[0]); // временно оставил для дебага.
+    // console.log(destinations[0]); // временно оставил для дебага.
     render(new PointEditView(this.eventsPoints[0], offers, destinations), this.eventContainerComponent.getElement());
 
     for (let i = 1; i < this.eventsPoints.length; i++) {

@@ -12,19 +12,23 @@ const createPointEditSelectTypeTemplate = (currentType) => POINT_TYPES.map((type
   </div>`
 ).join('');
 
-const createPointAddOfferTemplate = (pointId) => ( /* TODO Не понимаю как тут правильно замапить ID и сопоставить их с ТочкойМаршрута*/
-  `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${pointId.type}-${pointId.offers.id}" type="checkbox" name="event-offer-${pointId.type}" checked>
-    <label class="event__offer-label" for="event-offer-${pointId.type}-${pointId.offers.id}">
-      <span class="event__offer-title">${pointId.offers.title}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${pointId.offers.price}</span>
-    </label>
-  </div>`
-);
+const createPointAddOfferTemplate = (pointId, selectedOffers) => {
+  const checked = selectedOffers.includes(pointId.offers.id) ? 'checked' : '';
+
+  return (
+    `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${pointId.type}-${pointId.offers.id}" type="checkbox" name="event-offer-${pointId.type}" ${checked}>
+      <label class="event__offer-label" for="event-offer-${pointId.type}-${pointId.offers.id}">
+        <span class="event__offer-title">${pointId.offers.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${pointId.offers.price}</span>
+      </label>
+    </div>`
+  );
+};
+
 
 const createPointEditTemplate = (point = {}, pointOffers, pointDestinations) => {
-  console.log(pointOffers);
   const {
     basePrice = 50,
     dateFrom = '2022-01-01T10:00:00.000Z',
@@ -38,19 +42,12 @@ const createPointEditTemplate = (point = {}, pointOffers, pointDestinations) => 
   const selectTypeTemplate = createPointEditSelectTypeTemplate(type);
 
   let allOffers = '';
-
-  const generateOffers = (pointOffersList) => {
+  const generateOffers = (pointOffersList, pointSelectedOffers) => {
     for (let i = 0; i < pointOffersList.length; i++) {
-      allOffers += createPointAddOfferTemplate(pointOffersList[i]);
+      allOffers += createPointAddOfferTemplate(pointOffersList[i], pointSelectedOffers);
     }
     return allOffers;
   };
-
-  // const pnts = generateOffers(pointOffers);
-
-  // теперь мы будем передавать оферы и описание извне
-  // const pointAddOfferTemplate = createPointAddOfferTemplate(generatePointOffers);
-  // const pointDescription = generatePointDescription();
 
   return (
     `<li class="trip-events__item">
@@ -111,7 +108,7 @@ const createPointEditTemplate = (point = {}, pointOffers, pointDestinations) => 
 
             <div class="event__available-offers">
 
-              ${generateOffers(pointOffers)}
+              ${generateOffers(pointOffers, point.offers)}
 
             </div>
           </section>

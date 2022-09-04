@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
 import { getRandomIntInclusive } from '../utils.js';
-import { POINT_TYPES, DATE_MINUTES_RANDOMIZER, MIN_POINT_PRICE, MAX_POINT_PRICE, POINT_PRICE_MULTIPLIER, MIN_OFFERS, MAX_OFFERS } from './setup.js';
+import { POINT_TYPES, DATE_MINUTES_RANDOMIZER,MIN_POINT_PRICE,
+  MAX_POINT_PRICE, POINT_PRICE_MULTIPLIER, MIN_OFFERS,
+  MAX_OFFERS, MIN_OFFER_ID } from './setup.js';
 
 const generatePointType = () => {
   const randomIndex = getRandomIntInclusive(0, POINT_TYPES.length - 1);
-
   return POINT_TYPES[randomIndex];
 };
 
@@ -50,7 +51,7 @@ const createRandomIdFromRange = (min, max) => {
 const generatePoint = () => {
   const dateFrom = generateDate();
   const dateTo = generateDate();
-  const generateUniqueId = createRandomIdFromRange(MIN_OFFERS, MAX_OFFERS);
+  const generateUniqueId = createRandomIdFromRange(MIN_OFFER_ID, MAX_OFFERS);
 
   return {
     basePrice: generatePointPrice(),
@@ -79,9 +80,6 @@ Point:
   "offers": $Array<Offer.id>$,
   "type": "bus"
 }
-
-Point.type — одно из следующих значений:
-["taxi", "bus", "train", "ship", "drive", "flight", "check-in", "sightseeing", "restaurant"]
 
 LocalPoint:
 {

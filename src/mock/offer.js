@@ -1,5 +1,6 @@
 import { getRandomIntInclusive } from '../utils.js';
-import { MIN_OFFER_PRICE, MAX_OFFER_PRICE, OFFER_PRICE_MULTIPLIER, POINT_TYPES } from './setup';
+import { MIN_OFFER_PRICE, MAX_OFFER_PRICE, OFFER_PRICE_MULTIPLIER,
+  POINT_TYPES, MIN_OFFERS, MAX_OFFERS } from './setup';
 
 const generateOfferMessage = () => {
   const offerMessage = [
@@ -34,8 +35,8 @@ const generatePointOffer = () => ({
   }
 });
 
-const bigTripOffers = Array.from({length: 5}, generatePointOffer);
-// console.log(bigTripOffers);
+const generatePointOffers = Array.from({length: getRandomIntInclusive(MIN_OFFERS, MAX_OFFERS)}, generatePointOffer);
+console.log(generatePointOffers);
 // Дебажить удобнее на статических данных, поэтому пока это тут оставлю.
 
 //   type: 'taxi',
@@ -61,7 +62,7 @@ const bigTripOffers = Array.from({length: 5}, generatePointOffer);
 //   }]
 // }];
 
-export { bigTripOffers };
+export { generatePointOffers };
 
 /*
 Offer

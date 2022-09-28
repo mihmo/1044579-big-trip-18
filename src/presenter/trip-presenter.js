@@ -22,7 +22,6 @@ export default class TripPresenter {
 
     render(new SortView(), this.#eventsContainer);
     render(this.#eventContainerComponent, this.#eventsContainer);
-    // render(new PointItemView(this.#eventsPoints[0]), this.#eventContainerComponent.element);
     const offers = [...this.#offersModel.get()];
     const destinations = [...this.#destinationsModel.get()];
 
@@ -63,5 +62,9 @@ export default class TripPresenter {
       replaceFormPoint();
     });
 
+    pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+      replaceFormPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
+    });
   };
 }

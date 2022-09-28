@@ -1,6 +1,6 @@
 const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
-const POINTLIST_ITEMS_NUMBER = 3;
+const POINTLIST_ITEMS_NUMBER = 5;
 
 const DATE_MINUTES_RANDOMIZER = 7 * 24 * 60; // 10080 minutes in a week
 

@@ -166,16 +166,18 @@ const createPointAddTemplate = () => (
 );
 
 export default class PointAddView {
-  getTemplate() {
+  #element = null;
+
+  get template() {
     return createPointAddTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {

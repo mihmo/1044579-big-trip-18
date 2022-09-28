@@ -138,25 +138,30 @@ const createPointEditTemplate = (point = {}, pointOffers, pointDestinations) => 
 };
 
 export default class PointEditView {
+  #element = null;
+  #point = null;
+  #pointOffers = null;
+  #pointDestinations = null;
+
   constructor (point, pointOffers, pointDestinations) {
-    this.point = point;
-    this.pointOffers = pointOffers;
-    this.pointDestinations = pointDestinations;
+    this.#point = point;
+    this.#pointOffers = pointOffers;
+    this.#pointDestinations = pointDestinations;
   }
 
-  getTemplate() {
-    return createPointEditTemplate(this.point, this.pointOffers, this.pointDestinations);
+  get template() {
+    return createPointEditTemplate(this.#point, this.#pointOffers, this.#pointDestinations);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

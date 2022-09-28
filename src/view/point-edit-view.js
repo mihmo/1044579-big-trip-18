@@ -3,7 +3,7 @@ import { createElement } from '../render.js';
 import { humanizePointFullTime } from '../utils.js';
 import { POINT_TYPES } from '../mock/setup.js';
 // import { createPointDestinations } from '../mock/destination';
-import { generatePointOffers } from '../mock/offer.js';
+// import { generatePointOffers } from '../mock/offer.js';
 
 const createPointEditSelectTypeTemplate = (currentType) => POINT_TYPES.map((type) =>
   `<div class="event__type-item">
@@ -11,6 +11,14 @@ const createPointEditSelectTypeTemplate = (currentType) => POINT_TYPES.map((type
     <label class="event__type-label  event__type-label--${type}" for="event-type-${type}">${type}</label>
   </div>`
 ).join('');
+
+const createPhotosTemplate = (point) => {
+  let template = '';
+  for (let i = 0; i < point.pictures.length; i++) {
+    template += `<img class="event__photo" src= "${point.pictures[i].src}">`;
+  }
+  return template;
+};
 
 const createPointAddOfferTemplate = (pointId, selectedOffers) => {
   const checked = selectedOffers.includes(pointId.offers.id) ? 'checked' : '';
@@ -116,6 +124,11 @@ const createPointEditTemplate = (point = {}, pointOffers, pointDestinations) => 
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
             <p class="event__destination-description">${pointDestinations[0].description}</p>
+            <div class="event__photos-container">
+            <div class="event__photos-tape">
+              ${createPhotosTemplate(pointDestinations[0])}
+            </div>
+          </div>
           </section>
         </section>
       </form>
@@ -125,25 +138,30 @@ const createPointEditTemplate = (point = {}, pointOffers, pointDestinations) => 
 };
 
 export default class PointEditView {
+  #element = null;
+  #point = null;
+  #pointOffers = null;
+  #pointDestinations = null;
+
   constructor (point, pointOffers, pointDestinations) {
-    this.point = point;
-    this.pointOffers = pointOffers;
-    this.pointDestinations = pointDestinations;
+    this.#point = point;
+    this.#pointOffers = pointOffers;
+    this.#pointDestinations = pointDestinations;
   }
 
-  getTemplate() {
-    return createPointEditTemplate(this.point, this.pointOffers, this.pointDestinations);
+  get template() {
+    return createPointEditTemplate(this.#point, this.#pointOffers, this.#pointDestinations);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

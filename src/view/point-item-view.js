@@ -1,8 +1,8 @@
 import { createElement } from '../render.js';
 import { humanizePointDate, humanizePointTime, humanizeTimeSpent } from '../utils.js';
 
-const createPointsListTemplate = (point) => {
-  const {basePrice, dateFrom, dateTo, destination, isFavorite, type} = point;
+const createPointsListTemplate = (point, pointOffers) => {
+  const {basePrice, dateFrom, dateTo, destination, offers, isFavorite, type} = point;
   const date = dateFrom !== null
     ? humanizePointDate(dateFrom)
     : '';
@@ -18,6 +18,23 @@ const createPointsListTemplate = (point) => {
     : '';
 
   const timeSpent = humanizeTimeSpent(dateFrom, dateTo);
+
+  const createOfferTemplate = () => {
+    const destOffers = [];
+    for (const mockOffer of pointOffers) {
+      if (offers.includes(mockOffer.offers.id)) {
+        destOffers.push(mockOffer);
+      }
+    }
+    return destOffers
+      .map((offer) => `
+        <li class="event__offer">
+         <span class="event__offer-title">${offer.offers.title}</span>
+         &plus;&euro;&nbsp;
+         <span class="event__offer-price">${offer.offers.price}</span>
+        </li>
+      `).join(' ');
+  };
 
   return (
     `<li class="trip-events__item">
@@ -40,11 +57,7 @@ const createPointsListTemplate = (point) => {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Order Uber</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">20</span>
-          </li>
+        ${createOfferTemplate()}
         </ul>
         <button class="event__favorite-btn ${favoriteClassName}" type="button">
           <span class="visually-hidden">Add to favorite</span>
@@ -63,13 +76,15 @@ const createPointsListTemplate = (point) => {
 export default class PointItemView {
   #element = null;
   #point = null;
+  #pointOffers = null;
 
-  constructor(point) {
+  constructor(point, pointOffers) {
     this.#point = point;
+    this.#pointOffers = pointOffers;
   }
 
   get template() {
-    return createPointsListTemplate(this.#point);
+    return createPointsListTemplate(this.#point, this.#pointOffers);
   }
 
   get element() {

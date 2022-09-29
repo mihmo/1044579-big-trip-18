@@ -18,8 +18,8 @@ const pointsModel = new PointsModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 
-const tripPresenter = new TripPresenter();
-tripPresenter.init(tripEventsContainer, pointsModel, offersModel, destinationsModel);
+const tripPresenter = new TripPresenter(tripEventsContainer, pointsModel, offersModel, destinationsModel);
+tripPresenter.init();
 
 
 /* TODO Tasks:

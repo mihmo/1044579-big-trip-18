@@ -10,15 +10,18 @@ export default class TripPresenter {
   #pointsModel = null;
   #offersModel = null;
   #destinationsModel = null;
+
   #eventsPoints = null;
   #eventContainerComponent = new EventsContainerView();
 
-  init = (eventsContainer, pointsModel, offersModel, destinationsModel) => {
+  constructor(eventsContainer, pointsModel, offersModel, destinationsModel) {
     this.#eventsContainer = eventsContainer;
     this.#pointsModel = pointsModel;
     this.#offersModel = offersModel;
     this.#destinationsModel = destinationsModel;
+  }
 
+  init = () => {
     this.#eventsPoints = [...this.#pointsModel.points];
 
     render(new SortView(), this.#eventsContainer);

@@ -3,7 +3,7 @@ import EventsContainerView from '../view/events-container-view';
 import PointEditView from '../view/point-edit-view';
 import PointItemView from '../view/point-item-view';
 import ListEmptyView from '../view/list-empty-view';
-import { render } from '../framework/render.js';
+import { render, replace } from '../framework/render.js';
 
 export default class TripPresenter {
   #eventsContainer = null;
@@ -44,33 +44,33 @@ export default class TripPresenter {
 
     render(pointComponent, this.#eventContainerComponent.element);
 
-    const replacePointForm = () => {
-      this.#eventContainerComponent.element.replaceChild(pointEditComponent.element, pointComponent.element);
+    const replacePointToForm = () => {
+      replace(pointEditComponent, pointComponent);
     };
 
-    const replaceFormPoint = () => {
-      this.#eventContainerComponent.element.replaceChild(pointComponent.element, pointEditComponent.element);
+    const replaceFormToPoint = () => {
+      replace(pointComponent, pointEditComponent);
     };
 
     const onEscKeyDown = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
-        replaceFormPoint();
+        replaceFormToPoint();
         document.removeEventListener('keydown', onEscKeyDown);
       }
     };
 
     pointComponent.setEditClickHandler(() => {
-      replacePointForm();
+      replacePointToForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
     pointEditComponent.setFormSubmitHandler(() => {
-      replaceFormPoint();
+      replaceFormToPoint();
     });
 
     pointEditComponent.setEditClickHandler(() => {
-      replaceFormPoint();
+      replaceFormToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
     });
   };

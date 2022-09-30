@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizePointFullTime } from '../utils.js';
 import { POINT_TYPES } from '../mock/setup.js';
 // import { createPointDestinations } from '../mock/destination';
@@ -137,13 +137,13 @@ const createPointEditTemplate = (point = {}, pointOffers, pointDestinations) => 
 
 };
 
-export default class PointEditView {
-  #element = null;
+export default class PointEditView extends AbstractView {
   #point = null;
   #pointOffers = null;
   #pointDestinations = null;
 
   constructor (point, pointOffers, pointDestinations) {
+    super();
     this.#point = point;
     this.#pointOffers = pointOffers;
     this.#pointDestinations = pointDestinations;
@@ -151,17 +151,5 @@ export default class PointEditView {
 
   get template() {
     return createPointEditTemplate(this.#point, this.#pointOffers, this.#pointDestinations);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

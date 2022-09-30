@@ -3,7 +3,7 @@ import EventsContainerView from '../view/events-container-view';
 import PointEditView from '../view/point-edit-view';
 import PointItemView from '../view/point-item-view';
 import ListEmptyView from '../view/list-empty-view';
-import {render} from '../render.js';
+import { render } from '../framework/render.js';
 
 export default class TripPresenter {
   #eventsContainer = null;

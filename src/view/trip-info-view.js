@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const tripInfoTemplate = () => `<section class="trip-main__trip-info  trip-info">
 <div class="trip-info__main">
@@ -12,21 +12,8 @@ const tripInfoTemplate = () => `<section class="trip-main__trip-info  trip-info"
 </p>
 </section>`;
 
-export default class TripInfoView {
-  #element = null;
+export default class TripInfoView extends AbstractView {
   get template() {
     return tripInfoTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

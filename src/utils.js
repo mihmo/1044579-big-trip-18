@@ -50,6 +50,16 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => dayjs().isAfter(point.dateFrom) && dayjs().isAfter(point.dateFrom)),
 };
 
+const getTripInfo = (points) => {
+  const pointsSequence = points.slice(0);
+  let tripCost = 0;
+  pointsSequence.sort((a,b) => dayjs(a.dateFrom).isAfter(b.dateFrom) ? 1 : -1).forEach((point) => {
+    tripCost += point.basePrice;
+  });
+  return { pointsSequence, tripCost};
+};
+
 export { getRandomIntInclusive, declOfNumbers, isEscapeKey,
   humanizePointDate, humanizePointTime, humanizePointFullTime,
-  humanizeTimeSpent, convertMinutesToTime, isEventExpired, filter };
+  humanizeTimeSpent, convertMinutesToTime, isEventExpired,
+  filter, getTripInfo };

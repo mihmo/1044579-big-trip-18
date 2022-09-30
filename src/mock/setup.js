@@ -1,5 +1,7 @@
 const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
+const CITIES = ['Chamonix', 'Geneva', 'Amsterdam', 'Bratislava', 'London'];
+
 const POINTLIST_ITEMS_NUMBER = 5;
 
 const DATE_MINUTES_RANDOMIZER = 7 * 24 * 60; // 10080 minutes in a week
@@ -17,5 +19,5 @@ const MAX_OFFERS = 5;
 const MIN_OFFER_ID = 1;
 
 export { POINT_TYPES, POINTLIST_ITEMS_NUMBER, DATE_MINUTES_RANDOMIZER,MIN_POINT_PRICE,
-  MAX_POINT_PRICE, POINT_PRICE_MULTIPLIER, MIN_OFFERS, MAX_OFFERS, MIN_OFFER_PRICE,
+  MAX_POINT_PRICE, POINT_PRICE_MULTIPLIER, MIN_OFFERS, MAX_OFFERS, MIN_OFFER_PRICE, CITIES,
   MAX_OFFER_PRICE, OFFER_PRICE_MULTIPLIER, MIN_OFFER_ID };

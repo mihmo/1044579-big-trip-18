@@ -5,6 +5,7 @@ import OffersModel from './model/offers-model';
 import DestinationsModel from './model/destinations-model';
 import TripInfoView from './view/trip-info-view';
 import { generateFilter } from './mock/filter.js';
+import { generateTripInfo } from './mock/trip-info.js';
 import { render, RenderPosition } from './framework/render.js';
 
 const siteTripMainElement = document.querySelector('.trip-main');
@@ -16,10 +17,11 @@ const pointsModel = new PointsModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 const filters = generateFilter(pointsModel.points);
+const tripInfo = generateTripInfo(pointsModel.points);
 
 const tripPresenter = new TripPresenter(tripEventsContainer, pointsModel, offersModel, destinationsModel);
 
-render(new TripInfoView(), siteTripMainElement, RenderPosition.AFTERBEGIN);
+render(new TripInfoView(tripInfo), siteTripMainElement, RenderPosition.AFTERBEGIN);
 render(new FilterView(filters), siteFilterElement);
 
 tripPresenter.init();

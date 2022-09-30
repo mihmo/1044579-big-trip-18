@@ -36,45 +36,5 @@ const generatePointOffer = () => ({
 });
 
 const generatePointOffers = Array.from({length: getRandomIntInclusive(MIN_OFFERS, MAX_OFFERS)}, generatePointOffer);
-// console.log(generatePointOffers);
-// Дебажить удобнее на статических данных, поэтому пока это тут оставлю.
-
-//   type: 'taxi',
-//   offers: [{
-//     id: 1,
-//     title: generateOfferMessage(),
-//     price: getRandomIntInclusive(MIN_OFFER_PRICE, MAX_OFFER_PRICE) * OFFER_PRICE_MULTIPLIER
-//   }, {
-//     id: 2,
-//     title: generateOfferMessage(),
-//     price: getRandomIntInclusive(MIN_OFFER_PRICE, MAX_OFFER_PRICE) * OFFER_PRICE_MULTIPLIER
-//   }]
-// }, {
-//   type: 'flight',
-//   offers: [{
-//     id: 3,
-//     title: generateOfferMessage(),
-//     price: getRandomIntInclusive(MIN_OFFER_PRICE, MAX_OFFER_PRICE) * OFFER_PRICE_MULTIPLIER
-//   }, {
-//     id: 4,
-//     title: generateOfferMessage(),
-//     price: getRandomIntInclusive(MIN_OFFER_PRICE, MAX_OFFER_PRICE) * OFFER_PRICE_MULTIPLIER
-//   }]
-// }];
 
 export { generatePointOffers };
-
-/*
-Offer
-{
-  "id": 1,
-  "title": "Upgrade to a business class",
-  "price": 120
-}
-
-OffersByType:
-{
-  "type": "taxi",
-  "offers": $Array<Offer>$
-}
-*/

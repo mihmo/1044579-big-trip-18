@@ -38,4 +38,18 @@ const convertMinutesToTime = (minutes) => dayjs.duration(minutes, 'minutes').for
 
 const isEventExpired = (eventDate) => eventDate && dayjs().isAfter(eventDate, 'D');
 
-export { getRandomIntInclusive, declOfNumbers, isEscapeKey, humanizePointDate, humanizePointTime, humanizePointFullTime, humanizeTimeSpent, convertMinutesToTime, isEventExpired };
+const FilterType = {
+  ALL: 'everything',
+  FUTURE: 'future',
+  PAST: 'past',
+};
+
+const filter = {
+  [FilterType.ALL]: (points) => points,
+  [FilterType.FUTURE]: (points) => points.filter((point) => dayjs().isBefore(point.dateFrom) || dayjs().isBefore(point.dateFrom)),
+  [FilterType.PAST]: (points) => points.filter((point) => dayjs().isAfter(point.dateFrom) && dayjs().isAfter(point.dateFrom)),
+};
+
+export { getRandomIntInclusive, declOfNumbers, isEscapeKey,
+  humanizePointDate, humanizePointTime, humanizePointFullTime,
+  humanizeTimeSpent, convertMinutesToTime, isEventExpired, filter };

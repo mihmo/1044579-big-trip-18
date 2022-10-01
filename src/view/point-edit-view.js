@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizePointFullTime } from '../utils.js';
 import { POINT_TYPES } from '../mock/setup.js';
 // import { createPointDestinations } from '../mock/destination';
@@ -137,13 +137,13 @@ const createPointEditTemplate = (point = {}, pointOffers, pointDestinations) => 
 
 };
 
-export default class PointEditView {
-  #element = null;
+export default class PointEditView extends AbstractView {
   #point = null;
   #pointOffers = null;
   #pointDestinations = null;
 
   constructor (point, pointOffers, pointDestinations) {
+    super();
     this.#point = point;
     this.#pointOffers = pointOffers;
     this.#pointDestinations = pointDestinations;
@@ -153,15 +153,23 @@ export default class PointEditView {
     return createPointEditTemplate(this.#point, this.#pointOffers, this.#pointDestinations);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+  };
 
-    return this.#element;
-  }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  setEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+  };
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editClick();
+  };
 }

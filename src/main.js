@@ -4,7 +4,7 @@ import PointsModel from './model/points-model';
 import OffersModel from './model/offers-model';
 import DestinationsModel from './model/destinations-model';
 import TripInfoView from './view/trip-info-view';
-import {render, RenderPosition} from './render.js';
+import { render, RenderPosition } from './framework/render.js';
 
 const siteTripMainElement = document.querySelector('.trip-main');
 const siteFilterElement = siteTripMainElement.querySelector('.trip-controls__filters');
@@ -18,8 +18,8 @@ const pointsModel = new PointsModel();
 const offersModel = new OffersModel();
 const destinationsModel = new DestinationsModel();
 
-const tripPresenter = new TripPresenter();
-tripPresenter.init(tripEventsContainer, pointsModel, offersModel, destinationsModel);
+const tripPresenter = new TripPresenter(tripEventsContainer, pointsModel, offersModel, destinationsModel);
+tripPresenter.init();
 
 
 /* TODO Tasks:

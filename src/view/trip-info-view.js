@@ -1,19 +1,27 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import { humanizePointDate } from '../utils.js';
 
-const tripInfoTemplate = () => `<section class="trip-main__trip-info  trip-info">
+const tripInfoTemplate = (tripInfo) => `<section class="trip-main__trip-info  trip-info">
 <div class="trip-info__main">
-  <h1 class="trip-info__title">Amsterdam — Chamonix — Geneva</h1>
+  <h1 class="trip-info__title">${tripInfo.tripTitle}</h1>
 
-  <p class="trip-info__dates">Mar 18&nbsp;—&nbsp;20</p>
+  <p class="trip-info__dates">${humanizePointDate(tripInfo.tripDateFrom)} — ${humanizePointDate(tripInfo.tripDateTo)}</p>
 </div>
 
 <p class="trip-info__cost">
-  Total: €&nbsp;<span class="trip-info__cost-value">1230</span>
+  Total: €&nbsp;<span class="trip-info__cost-value">${tripInfo.tripCost}</span>
 </p>
 </section>`;
 
 export default class TripInfoView extends AbstractView {
+  #tripInfo = null;
+
+  constructor(tripInfo) {
+    super();
+    this.#tripInfo = tripInfo;
+  }
+
   get template() {
-    return tripInfoTemplate();
+    return tripInfoTemplate(this.#tripInfo);
   }
 }

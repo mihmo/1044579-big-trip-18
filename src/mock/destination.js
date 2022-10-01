@@ -1,5 +1,5 @@
 import { getRandomIntInclusive } from '../utils';
-import { MIN_OFFERS, MAX_OFFERS } from './setup';
+import { MIN_OFFERS, MAX_OFFERS, CITIES } from './setup';
 
 
 const generatePhotoUrl = () => {
@@ -33,7 +33,7 @@ const generatePointId = () => {
 };
 
 const generatePointDestination = () => {
-  const destinations = ['Chamonix', 'Geneva', 'Amsterdam', 'Bratislava', 'London'];
+  const destinations = CITIES;
   const randomIndex = getRandomIntInclusive(0, destinations.length - 1);
   return destinations[randomIndex];
 };
@@ -51,21 +51,5 @@ const createPointDestination = () => (
 );
 
 const createPointDestinations = Array.from({length: MAX_OFFERS}, createPointDestination);
-// console.log(createPointDestinations);
 
 export { createPointDestinations };
-
-/*
-Destination:
-{
-  "id": 1,
-  "description": "Chamonix, is a beautiful city, a true asian pearl, with crowded streets.",
-  "name": "Chamonix",
-  "pictures": [
-    {
-      "src": "http://picsum.photos/300/200?r=0.0762563005163317",
-      "description": "Chamonix parliament building"
-    }
-  ]
-}
-*/

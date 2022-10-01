@@ -38,4 +38,28 @@ const convertMinutesToTime = (minutes) => dayjs.duration(minutes, 'minutes').for
 
 const isEventExpired = (eventDate) => eventDate && dayjs().isAfter(eventDate, 'D');
 
-export { getRandomIntInclusive, declOfNumbers, isEscapeKey, humanizePointDate, humanizePointTime, humanizePointFullTime, humanizeTimeSpent, convertMinutesToTime, isEventExpired };
+const FilterType = {
+  ALL: 'everything',
+  FUTURE: 'future',
+  PAST: 'past',
+};
+
+const filter = {
+  [FilterType.ALL]: (points) => points,
+  [FilterType.FUTURE]: (points) => points.filter((point) => dayjs().isBefore(point.dateFrom) || dayjs().isBefore(point.dateFrom)),
+  [FilterType.PAST]: (points) => points.filter((point) => dayjs().isAfter(point.dateFrom) && dayjs().isAfter(point.dateFrom)),
+};
+
+const getTripInfo = (points) => {
+  const pointsSequence = points;
+  let tripCost = 0;
+  pointsSequence.sort((a,b) => dayjs(a.dateFrom).isAfter(b.dateFrom) ? 1 : -1).forEach((point) => {
+    tripCost += point.basePrice;
+  });
+  return { pointsSequence, tripCost};
+};
+
+export { getRandomIntInclusive, declOfNumbers, isEscapeKey,
+  humanizePointDate, humanizePointTime, humanizePointFullTime,
+  humanizeTimeSpent, convertMinutesToTime, isEventExpired,
+  filter, getTripInfo };

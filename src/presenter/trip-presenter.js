@@ -1,4 +1,3 @@
-import SortView from '../view/sort-view';
 import EventsContainerView from '../view/events-container-view';
 import PointEditView from '../view/point-edit-view';
 import PointItemView from '../view/point-item-view';
@@ -24,7 +23,6 @@ export default class TripPresenter {
   init = () => {
     this.#eventsPoints = [...this.#pointsModel.points];
 
-    render(new SortView(), this.#eventsContainer);
     render(this.#eventContainerComponent, this.#eventsContainer);
     const offers = [...this.#offersModel.get()];
     const destinations = [...this.#destinationsModel.get()];

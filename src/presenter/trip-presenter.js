@@ -39,7 +39,7 @@ export default class TripPresenter {
   };
 
   #renderPoint = (point) => {
-    const pointPresenter = new PointPresenter(this.#contentList.element, this.#handlePointChange);
+    const pointPresenter = new PointPresenter(this.#contentList.element, this.#handlePointChange, this.#handleModeChange); // передаем контейнер, обработчик изменения, обработчик изменения вида карточки
     pointPresenter.init(point);
     this.#pointsPresenter.set(point.id, pointPresenter);
   };
@@ -58,6 +58,14 @@ export default class TripPresenter {
 
   #handlePointChange = (updatedPoint) => {
     this.#mainPoints = updateItem(this.#mainPoints, updatedPoint);
+    // console.log(updatedPoint); // для дебага, уберу потом
     this.#pointsPresenter.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #handleModeChange = () => {
+    this.#pointsPresenter.forEach((presenter) => {
+      presenter.resetView();
+      // console.log(this.#pointsPresenter);
+    });
   };
 }

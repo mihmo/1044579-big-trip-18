@@ -55,6 +55,11 @@ const FilterType = {
   PAST: 'past',
 };
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 export {
   POINT_COUNT,
   CITY_DESC,
@@ -67,4 +72,5 @@ export {
   MAX_ID,
   maxShowTitleCities,
   FilterType,
+  Mode
 };

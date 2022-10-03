@@ -1,33 +1,28 @@
-import FilterView from './view/filter-view';
-import TripPresenter from './presenter/trip-presenter';
-import PointsModel from './model/points-model';
-import OffersModel from './model/offers-model';
-import DestinationsModel from './model/destinations-model';
-import TripInfoView from './view/trip-info-view';
-import SortView from './view/sort-view';
-import { generateFilter } from './mock/filter.js';
-import { generateTripInfo } from './mock/trip-info.js';
 import { render, RenderPosition } from './framework/render.js';
+import FilterView from './view/filter-view.js';
+import SortView from './view/sort-view.js';
+import TripPresenter from './presenter/trip-presenter.js';
+import TripInfoView from './view/trip-info-view.js';
+import PointsModel from './model/points-model.js';
+import {generateFilter} from './mock/filter.js';
+import {generateTripInfo} from './mock/trip-info.js';
 
-const siteTripMainElement = document.querySelector('.trip-main');
-const siteFilterElement = siteTripMainElement.querySelector('.trip-controls__filters');
-const siteMainElement = document.querySelector('.page-main');
-const tripEventsContainer = siteMainElement.querySelector('.trip-events');
+const siteMainTripElement = document.querySelector('.trip-main');
+const siteFilterElement = siteMainTripElement.querySelector('.trip-controls__filters');
+const pageBodyElement = document.querySelector('.page-body__page-main');
+const eventsElement = pageBodyElement.querySelector('.trip-events');
 
 const pointsModel = new PointsModel();
-const offersModel = new OffersModel();
-const destinationsModel = new DestinationsModel();
-
-const tripPresenter = new TripPresenter(tripEventsContainer, pointsModel, offersModel, destinationsModel);
+const tripPresenter = new TripPresenter(eventsElement, pointsModel);
 
 if (pointsModel.points.length) {
   const filters = generateFilter(pointsModel.points);
   const tripInfo = generateTripInfo(pointsModel.points);
 
-  render(new TripInfoView(tripInfo), siteTripMainElement, RenderPosition.AFTERBEGIN);
+  render(new TripInfoView(tripInfo), siteMainTripElement, RenderPosition.AFTERBEGIN);
   render(new FilterView(filters), siteFilterElement);
 }
 
-render(new SortView(), tripEventsContainer);
+render(new SortView(), eventsElement);
 
 tripPresenter.init();

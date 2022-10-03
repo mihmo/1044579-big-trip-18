@@ -1,55 +1,26 @@
-import { getRandomIntInclusive } from '../utils';
-import { MIN_OFFERS, MAX_OFFERS, CITIES } from './setup';
+import { CITY_DESC, CITIES } from './setup.js';
+import { getRandomInteger, getRandomElementsFromArray } from '../utils.js';
 
+const generateDestination = (id) => ({
+  id,
+  description: getRandomElementsFromArray(CITY_DESC),
+  name: CITIES[id],
+  pictures: [
+    {
+      src: `http://picsum.photos/248/152?r=${getRandomInteger(0, 100)}`,
+      description: CITY_DESC[getRandomInteger(0, CITY_DESC.length - 1)].slice(getRandomInteger(0, CITY_DESC.length - 1)),
+    }
+  ]
+});
 
-const generatePhotoUrl = () => {
-  const photoUrls = [
-    'img/photos/1.jpg',
-    'img/photos/2.jpg',
-    'img/photos/3.jpg',
-    'img/photos/4.jpg',
-    'img/photos/5.jpg'
-  ];
-  const randomIndex = getRandomIntInclusive(0, photoUrls.length - 1);
-  return photoUrls[randomIndex];
-};
-
-const generatePointDescription = () => {
-  const descriptions = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed nisi sed augue convallis suscipit in sed felis.',
-    'Cras aliquet varius magna, non porta ligula feugiat eget.',
-    'Fusce tristique felis at fermentum pharetra. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
-    'Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
-    'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
-  ];
-  const randomIndex = getRandomIntInclusive(0, descriptions.length - 1);
-  return descriptions[randomIndex];
-};
-
-let destinationId = 0;
-const generatePointId = () => {
-  destinationId++;
-  return destinationId;
-};
-
-const generatePointDestination = () => {
-  const destinations = CITIES;
-  const randomIndex = getRandomIntInclusive(0, destinations.length - 1);
-  return destinations[randomIndex];
-};
-
-const createPointDestination = () => (
-  {
-    id: generatePointId(),
-    description: generatePointDescription(),
-    name: generatePointDestination(),
-    pictures: Array.from({length: getRandomIntInclusive(MIN_OFFERS, MAX_OFFERS)}, () => ({
-      src: generatePhotoUrl(),
-      description: generatePointDescription()
-    }))
+const getDestinations = (count) => {
+  const dests = [];
+  for (let i = 0; i < count; i++) {
+    dests.push(generateDestination(i));
   }
-);
+  return dests;
+};
 
-const createPointDestinations = Array.from({length: MAX_OFFERS}, createPointDestination);
+const destinations = getDestinations(CITIES.length);
 
-export { createPointDestinations };
+export { destinations };

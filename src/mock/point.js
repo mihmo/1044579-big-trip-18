@@ -1,68 +1,27 @@
+import { getRandomInteger, createRandomId } from '../utils.js';
+import { TYPES, EXTRA_OFFERS, basePrice, CITIES } from './setup.js';
 import dayjs from 'dayjs';
-import { getRandomIntInclusive } from '../utils.js';
-import { POINT_TYPES, DATE_MINUTES_RANDOMIZER,MIN_POINT_PRICE,
-  MAX_POINT_PRICE, POINT_PRICE_MULTIPLIER, MIN_OFFERS,
-  CITIES, MAX_OFFERS, MIN_OFFER_ID } from './setup.js';
-
-const generatePointType = () => {
-  const randomIndex = getRandomIntInclusive(0, POINT_TYPES.length - 1);
-  return POINT_TYPES[randomIndex];
-};
-
-const generatePointDestination = () => {
-  const destinations = CITIES;
-  const randomIndex = getRandomIntInclusive(0, destinations.length - 1);
-  return destinations[randomIndex];
-};
 
 const generateDate = () => {
+  const dayGap = getRandomInteger(1, 31);
+  const hourGap = getRandomInteger(1, 24);
+  const minGap = getRandomInteger(1, 60);
+  const dateFrom = dayjs().add(dayGap, 'day').add(hourGap, 'hour').add(minGap, 'minute');
+  const dateTo = dateFrom.add(hourGap, 'hour').add(minGap, 'minute');
 
-  const maxDaysGap = DATE_MINUTES_RANDOMIZER;
-  const daysGap = getRandomIntInclusive(-maxDaysGap, maxDaysGap);
-
-  return dayjs().add(daysGap, 'minutes').toDate();
+  return { dateFrom, dateTo };
 };
 
-const generatePointPrice = () => getRandomIntInclusive(MIN_POINT_PRICE, MAX_POINT_PRICE) * POINT_PRICE_MULTIPLIER; // цена от 100 - 1500 с шагом 10
-
-let pointId = 0;
-const generatePointId = () => {
-  pointId++;
-  return `${String(pointId).padStart(3,'0')}`;
-};
-
-const createRandomIdFromRange = (min, max) => {
-  const previousValues = [];
-  return function () {
-    let currentValue = getRandomIntInclusive(min, max);
-    if (previousValues.length >= (max - min + 1)) {
-      // console.error(`Перебраны все ID из диапазона от ${ min } до ${ max }`);
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomIntInclusive(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-};
-
-
-const generatePoint = () => {
-  const dateFrom = generateDate();
-  const dateTo = generateDate();
-  const generateUniqueId = createRandomIdFromRange(MIN_OFFER_ID, MAX_OFFERS);
-
+export const generatePoint = () => {
+  const datePoint = generateDate();
   return {
-    basePrice: generatePointPrice(),
-    dateFrom,
-    dateTo,
-    destination: generatePointDestination(),
-    id: generatePointId(),
-    isFavorite: false,
-    offers: Array.from({length: getRandomIntInclusive(MIN_OFFERS, MAX_OFFERS)}, () => generateUniqueId()), //создаем рандомный массив рандомных ИД оферов
-    type: generatePointType()
+    id: createRandomId(),
+    basePrice: getRandomInteger(basePrice.MIN, basePrice.MAX) * basePrice.MULTIPLIER,
+    dateFrom: datePoint.dateFrom,
+    dateTo: datePoint.dateTo,
+    destination: getRandomInteger(0, CITIES.length - 1),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
+    offers: [...new Set(Array.from({length: getRandomInteger(0, EXTRA_OFFERS.length - 1)}, ()=> getRandomInteger(0, EXTRA_OFFERS.length - 1)))],
+    type: TYPES[getRandomInteger(0, TYPES.length - 1)],
   };
 };
-
-export { generatePoint, generatePointType };

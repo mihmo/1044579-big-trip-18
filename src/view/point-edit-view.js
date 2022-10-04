@@ -4,7 +4,7 @@ import { TYPES, CITIES } from '../mock/setup.js';
 import { destinations } from '../mock/destination.js';
 import { mockOffers, mockOffersByType } from '../mock/offers.js';
 import flatpickr from 'flatpickr';
-import rangePlugin from 'flatpickr/dist/plugins/rangePlugin';
+import 'flatpickr/dist/flatpickr.min.css';
 
 const editPointTemplate = (point) => {
   const { dateFrom, dateTo, type, destination, basePrice, offers } = point;
@@ -133,7 +133,8 @@ export default class PointEditView extends AbstractStatefulView {
     super();
     this._state = PointEditView.parsePointToState(point);
     this.#setInnerHandlers();
-    this.#setDatepicker();
+    this.#setFromDatepicker();
+    this.#setToDatepicker();
   }
 
   get template() {
@@ -169,7 +170,8 @@ export default class PointEditView extends AbstractStatefulView {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setEditClickHandler(this._callback.editClick);
-    this.#setDatepicker();
+    this.#setFromDatepicker();
+    this.#setToDatepicker();
   };
 
   #setInnerHandlers = () => {
@@ -184,24 +186,42 @@ export default class PointEditView extends AbstractStatefulView {
       .forEach((eventType) => eventType.addEventListener('change', this.#eventSelectOffersToggleHandler));
   };
 
-  #datesChangeHandler = ([userDateStart, userDateEnd]) => {
+  #dateStartHandler = ([userDateStart]) => {
     this.updateElement({
       dateFrom: userDateStart,
+    });
+  };
+
+  #dateEndHandler = ([userDateEnd]) => {
+    this.updateElement({
       dateTo: userDateEnd,
     });
   };
 
-
-  #setDatepicker = () => {
-    const startTimeInput = this.element.querySelector('input[name="event-start-time"]');
-    const endTimeInput = this.element.querySelector('input[name="event-end-time"]');
+  #setFromDatepicker = () => {
+    const dateStartInput = this.element.querySelector('input[name="event-start-time"]');
     this.#datepicker = flatpickr(
-      startTimeInput,
+      dateStartInput,
       {
         enableTime: true,
-        dateFormat: 'd/m/Y H:i',
-        'plugins': [new rangePlugin({ input: endTimeInput })],
-        onChange: this.#datesChangeHandler,
+        'time_24hr': true,
+        defaultDate: dateStartInput.value,
+        dateFormat: 'd/m/y H:i',
+        onClose: this.#dateStartHandler,
+      },
+    );
+  };
+
+  #setToDatepicker = () => {
+    const dateEndInput = this.element.querySelector('input[name="event-end-time"]');
+    this.#datepicker = flatpickr(
+      dateEndInput,
+      {
+        enableTime: true,
+        'time_24hr': true,
+        defaultDate: dateEndInput.value,
+        dateFormat: 'd/m/y H:i',
+        onClose: this.#dateEndHandler,
       },
     );
   };

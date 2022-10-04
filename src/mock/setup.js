@@ -1,23 +1,76 @@
-const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const POINT_COUNT = 3;
 
-const CITIES = ['Chamonix', 'Geneva', 'Amsterdam', 'Bratislava', 'London'];
+const CITY_DESC = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed nisi sed augue convallis suscipit in sed felis.',
+  'Cras aliquet varius magna, non porta ligula feugiat eget.',
+  'Fusce tristique felis at fermentum pharetra. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
+  'Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
+  'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. '
+];
 
-const POINTLIST_ITEMS_NUMBER = 5;
+const CITIES = [
+  'Chamonix', 'Geneva', 'Amsterdam', 'Bratislava', 'London'
+];
 
-const DATE_MINUTES_RANDOMIZER = 7 * 24 * 60; // 10080 minutes in a week
+const TYPES = [
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant'
+];
 
-const MIN_POINT_PRICE = 10;
-const MAX_POINT_PRICE = 150;
-const POINT_PRICE_MULTIPLIER = 10;
+const EXTRA_OFFERS = [
+  'Order Uber',
+  'Choose the radio station',
+  'Add wine',
+  'Switch to comfort',
+  'Add luggage'
+];
 
-const MIN_OFFER_PRICE = 5;
-const MAX_OFFER_PRICE = 50;
-const OFFER_PRICE_MULTIPLIER = 5;
+const basePrice = {
+  MIN: 10,
+  MAX: 150,
+  MULTIPLIER: 10,
+};
 
-const MIN_OFFERS = 0;
-const MAX_OFFERS = 5;
-const MIN_OFFER_ID = 1;
+const offerPrice = {
+  MIN: 5,
+  MAX: 50,
+  MULTIPLIER: 5,
+};
 
-export { POINT_TYPES, POINTLIST_ITEMS_NUMBER, DATE_MINUTES_RANDOMIZER,MIN_POINT_PRICE,
-  MAX_POINT_PRICE, POINT_PRICE_MULTIPLIER, MIN_OFFERS, MAX_OFFERS, MIN_OFFER_PRICE, CITIES,
-  MAX_OFFER_PRICE, OFFER_PRICE_MULTIPLIER, MIN_OFFER_ID };
+const MIN_ID = 1;
+const MAX_ID = 10000;
+
+const maxShowTitleCities = 3;
+
+const FilterType = {
+  ALL: 'everything',
+  FUTURE: 'future',
+  PAST: 'past',
+};
+
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
+export {
+  POINT_COUNT,
+  CITY_DESC,
+  CITIES,
+  TYPES,
+  EXTRA_OFFERS,
+  offerPrice,
+  basePrice,
+  MIN_ID,
+  MAX_ID,
+  maxShowTitleCities,
+  FilterType,
+  Mode
+};

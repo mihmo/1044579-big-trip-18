@@ -3,6 +3,10 @@ import PointNewView from '../view/point-new-view.js';
 import ContentListView from '../view/content-list-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import PointPresenter from './point-presenter.js';
+import FilterView from '../view/filter-view.js';
+import TripInfoView from '../view/trip-info-view.js';
+import {generateFilter} from '../mock/filter.js';
+import {generateTripInfo} from '../mock/trip-info.js';
 import SortView from '../view/sort-view.js';
 import { SortType } from '../mock/setup.js';
 import { updateItem, sortPointsDate, sortPointPrice, sortPointTime } from '../utils.js';
@@ -51,6 +55,8 @@ export default class TripPresenter {
       }
       this.#renderContentList();
       this.#renderNewPoint();
+      this.#renderTripInfo();
+      this.#renderFilter();
     } else {
       this.#renderEmptyContentList();
     }
@@ -109,6 +115,18 @@ export default class TripPresenter {
     this.#sortPoints(sortType);
     this.#clearPointList();
     this.#renderPoints();
+  };
+
+  #renderTripInfo = () => {
+    const siteMainTripElement = document.querySelector('.trip-main');
+    const tripInfo = generateTripInfo(this.#mainPoints);
+    render(new TripInfoView(tripInfo), siteMainTripElement, RenderPosition.AFTERBEGIN);
+  };
+
+  #renderFilter = () => {
+    const siteFilterElement = document.querySelector('.trip-controls__filters');
+    const filters = generateFilter(this.#mainPoints);
+    render(new FilterView(filters), siteFilterElement);
   };
 
   #renderSort = () => {

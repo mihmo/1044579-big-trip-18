@@ -183,7 +183,10 @@ export default class PointEditView extends AbstractStatefulView {
       .addEventListener('change', this.#eventDestinationInputHandler);
 
     Array.from(this.element.querySelectorAll('.event__offer-checkbox'))
-      .forEach((eventType) => eventType.addEventListener('change', this.#eventSelectOffersToggleHandler));
+      .forEach((eventOffer) => eventOffer.addEventListener('change', this.#eventSelectOffersToggleHandler));
+
+    Array.from(this.element.querySelectorAll('.event__input--price'))
+      .forEach((eventPrice) => eventPrice.addEventListener('change', this.#eventPriceChangeHandler));
   };
 
   #dateStartHandler = ([userDateStart]) => {
@@ -231,6 +234,13 @@ export default class PointEditView extends AbstractStatefulView {
     this.updateElement({
       type: evt.target.value,
       offers: [],
+    });
+  };
+
+  #eventPriceChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      basePrice: evt.target.value,
     });
   };
 

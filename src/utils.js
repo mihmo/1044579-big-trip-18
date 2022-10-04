@@ -1,5 +1,7 @@
 import { MIN_ID, MAX_ID, FilterType } from './mock/setup.js';
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
 
 // Функция для генерации случайного числа из диапазона
 const getRandomInteger = (a = 0, b = 1) => {
@@ -27,23 +29,19 @@ const getRandomElementsFromArray = (arr) => {
 // функция склоняет числовые значения, взял тут https://realadmin.ru/coding/sklonenie-na-javascript.html
 const declOfNumbers = (number, words) => words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? Math.abs(number) % 10 : 5]];
 
+//Функция для расчета времени
 const humanizeDateDDMMYYHHmm = (date) => dayjs(date).format('DD/MM/YY HH:mm');
 const humanizeDateHHmm = (date) => dayjs(date).format('HH:mm');
 const humanizeDateMMMDD = (date) => dayjs(date).format('MMM DD');
-
-//Функция для расчета длительности пребывания в точке
-const getTimeFromMins = (mins) => {
-  const days = Math.trunc(mins / 60 / 24);
-  const hours = Math.trunc(mins / 60);
-  const minutes = mins % 60;
-
-  if (days === 0 && hours !== 0) {
-    return `${hours}H ${minutes}M`;
-  } else if (days === 0 && hours === 0) {
-    return `${minutes}M`;
-  } else {
-    return `${days}D ${hours}H ${minutes}M`;
+const humanizeDateDDHHmm = (dateFrom, dateTo) => {
+  const minutes = dayjs(dateTo).diff(dayjs(dateFrom), 'minute');
+  if (minutes < 60) {
+    return dayjs.duration(minutes, 'minutes').format('mm[m]');
   }
+  if (minutes >= 60 && minutes < 1440) {
+    return dayjs.duration(minutes, 'minutes').format('HH[h] mm[m]');
+  }
+  return dayjs.duration(minutes, 'minutes').format('DD[d] HH[h] mm[m]');
 };
 
 //Функция для напсиания строки с заглавной буквы
@@ -117,6 +115,6 @@ const sortPointTime = (pointA, pointB) => (pointB.dateTo - pointB.dateFrom) - (p
 const sortPointPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
 
 export { getRandomInteger, getRandomElementsFromArray, humanizeDateHHmm,
-  humanizeDateMMMDD, humanizeDateDDMMYYHHmm, getTimeFromMins,
+  humanizeDateMMMDD, humanizeDateDDMMYYHHmm, humanizeDateDDHHmm,
   setCapitalLetter, getTripInfo, declOfNumbers, createRandomId,
   updateItem, sortPointsDate, sortPointTime, sortPointPrice, filter };

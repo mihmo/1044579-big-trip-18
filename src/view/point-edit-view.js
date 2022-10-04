@@ -15,10 +15,10 @@ const editPointTemplate = (point) => {
         destOffers.push(mockOffer);
       }
     }
-    return destOffers.map((offer) => `
+    return mockOffers.map((offer) => `
       <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${isOfferChecked(offer)}>
-        <label class="event__offer-label" for="event-offer-luggage-1">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${TYPES[offer.id]}-1" type="checkbox" name="event-offer-luggage" ${isOfferChecked(offer)}>
+        <label class="event__offer-label" for="event-offer-${TYPES[offer.id]}-1">
           <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.price}</span>
@@ -28,6 +28,13 @@ const editPointTemplate = (point) => {
   };
 
   const offersTemplate = createEditOfferTemplate();
+
+  const createPhotoTemplate = (pictures) =>
+    pictures.map((picture) =>
+      `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`)
+      .join('');
+
+  const photoTemplate = createPhotoTemplate(destinations[destination].pictures);
 
   const createEditTypeTemplate = (currentType) =>
     TYPES.map((iterationType) => `
@@ -39,10 +46,16 @@ const editPointTemplate = (point) => {
 
   const typesTemplate = createEditTypeTemplate(type);
 
-  const createDestinationListTemplate = (selectedCity) =>
-    CITIES.map((city) => `
+  const createDestinationListTemplate = (selectedCity) => `
+    <label class="event__label  event__type-output" for="event-destination-1">
+    ${type}
+    </label>
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${selectedCity}" list="destination-list-1">
+    <datalist id="destination-list-1">
+    ${CITIES.map((city) => `
     <option value="${city}" ${selectedCity === city ? 'selected' : ''}></option>
-       `).join('');
+       `).join('')}
+    </datalist>`;
 
   const destListTemplate = createDestinationListTemplate(destinations[destination].name);
 
@@ -67,13 +80,7 @@ const editPointTemplate = (point) => {
         </div>
 
         <div class="event__field-group  event__field-group--destination">
-          <label class="event__label  event__type-output" for="event-destination-1">
-          ${type}
-          </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinations[destination].name}" list="destination-list-1">
-          <datalist id="destination-list-1">
           ${destListTemplate}
-          </datalist>
         </div>
 
         <div class="event__field-group  event__field-group--time">
@@ -110,6 +117,11 @@ const editPointTemplate = (point) => {
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${destinations[destination].description}</p>
+          <div class="event__photos-container">
+            <div class="event__photos-tape">
+              ${photoTemplate}
+            </div>
+          </div>
         </section>
       </section>
      </form>

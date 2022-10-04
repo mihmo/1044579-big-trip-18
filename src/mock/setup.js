@@ -1,4 +1,4 @@
-const POINT_COUNT = 3;
+const POINT_COUNT = 4;
 
 const CITY_DESC = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed nisi sed augue convallis suscipit in sed felis.',
@@ -60,6 +60,12 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+const SortType = {
+  DEFAULT: 'default',
+  TIME: 'time',
+  PRICE: 'price',
+};
+
 export {
   POINT_COUNT,
   CITY_DESC,
@@ -72,5 +78,6 @@ export {
   MAX_ID,
   maxShowTitleCities,
   FilterType,
-  Mode
+  Mode,
+  SortType
 };

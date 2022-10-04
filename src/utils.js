@@ -31,24 +31,18 @@ const humanizeDateDDMMYYHHmm = (date) => dayjs(date).format('DD/MM/YY HH:mm');
 const humanizeDateHHmm = (date) => dayjs(date).format('HH:mm');
 const humanizeDateMMMDD = (date) => dayjs(date).format('MMM DD');
 
+//Функция для расчета длительности пребывания в точке
 const getTimeFromMins = (mins) => {
+  const days = Math.trunc(mins / 60 / 24);
   const hours = Math.trunc(mins / 60);
   const minutes = mins % 60;
-  return `${hours}H ${minutes}M`;
-};
 
-const humanizeTimeSpent = (dateFrom, dateTo) => {
-  const minutesSpent = dayjs(dateTo).diff(dateFrom, 'minute');
-  const daysSpent = Math.floor(minutesSpent / 1440);
-  const hoursSpent = Math.floor(minutesSpent / 60);
-  const minSpent = minutesSpent % 60;
-
-  if (daysSpent) {
-    return `${daysSpent}D ${Math.floor(hoursSpent % 24)}H ${minSpent}`;
-  } else if (hoursSpent) {
-    return `${hoursSpent}H ${minSpent}`;
+  if (days === 0 && hours !== 0) {
+    return `${hours}H ${minutes}M`;
+  } else if (days === 0 && hours === 0) {
+    return `${minutes}M`;
   } else {
-    return minSpent;
+    return `${days}D ${hours}H ${minutes}M`;
   }
 };
 
@@ -105,8 +99,24 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => dayjs().isAfter(point.dateFrom) && dayjs().isAfter(point.dateFrom)),
 };
 
+const getWeightForToday = (dateA, dateB) => {
+  if (dateA === null && dateB === null) { return 0; }
+  if (dateA === null) { return 1; }
+  if (dateB === null) { return -1; }
+  return null;
+};
+
+const sortPointsDate = (pointA, pointB) => {
+  const weight = getWeightForToday(pointA.dateFrom, pointB.dateFrom);
+
+  return weight ?? dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+};
+
+const sortPointTime = (pointA, pointB) => (pointB.dateTo - pointB.dateFrom) - (pointA.dateTo - pointA.dateFrom);
+
+const sortPointPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
+
 export { getRandomInteger, getRandomElementsFromArray, humanizeDateHHmm,
-  humanizeDateMMMDD, humanizeDateDDMMYYHHmm, getTimeFromMins, humanizeTimeSpent,
+  humanizeDateMMMDD, humanizeDateDDMMYYHHmm, getTimeFromMins,
   setCapitalLetter, getTripInfo, declOfNumbers, createRandomId,
-  updateItem,
-  filter };
+  updateItem, sortPointsDate, sortPointTime, sortPointPrice, filter };

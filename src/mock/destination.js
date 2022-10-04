@@ -8,7 +8,11 @@ const generateDestination = (id) => ({
   pictures: [
     {
       src: `http://picsum.photos/248/152?r=${getRandomInteger(0, 100)}`,
-      description: CITY_DESC[getRandomInteger(0, CITY_DESC.length - 1)].slice(getRandomInteger(0, CITY_DESC.length - 1)),
+      description: `${CITIES[id]} ${CITY_DESC[getRandomInteger(0, CITY_DESC.length - 1)].split().slice(0,1)}`,
+    },
+    {
+      src: `http://picsum.photos/248/152?r=${getRandomInteger(0, 100)}`,
+      description: `${CITIES[id]} ${CITY_DESC[getRandomInteger(0, CITY_DESC.length - 1)].split().slice(0,1)}`,
     }
   ]
 });

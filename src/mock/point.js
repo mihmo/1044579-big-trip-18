@@ -1,6 +1,7 @@
-import { getRandomInteger } from '../utils.js';
+import { getRandomInteger, getRandomElementsFromArray } from '../utils.js';
 import { nanoid } from 'nanoid';
-import { TYPES, EXTRA_OFFERS, basePrice, CITIES } from './setup.js';
+import { basePrice, CITIES } from './setup.js';
+import { mockOffersByType } from '../mock/offers.js';
 import dayjs from 'dayjs';
 
 const generateDate = () => {
@@ -15,6 +16,7 @@ const generateDate = () => {
 
 export const generatePoint = () => {
   const datePoint = generateDate();
+  const typeAndOffers = mockOffersByType[getRandomInteger(0, mockOffersByType.length - 1)];
   return {
     id: nanoid(),
     basePrice: getRandomInteger(basePrice.MIN, basePrice.MAX) * basePrice.MULTIPLIER,
@@ -22,7 +24,7 @@ export const generatePoint = () => {
     dateTo: datePoint.dateTo,
     destination: getRandomInteger(0, CITIES.length - 1),
     isFavorite: Boolean(getRandomInteger(0, 1)),
-    offers: [...new Set(Array.from({length: getRandomInteger(0, EXTRA_OFFERS.length - 1)}, ()=> getRandomInteger(0, EXTRA_OFFERS.length - 1)))],
-    type: TYPES[getRandomInteger(0, TYPES.length - 1)],
+    offers: getRandomElementsFromArray(typeAndOffers.offers),
+    type: typeAndOffers.type,
   };
 };

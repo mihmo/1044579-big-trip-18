@@ -1,5 +1,5 @@
 import {render, replace, remove } from '../framework/render.js';
-import { Mode } from '../mock/setup.js';
+import { Mode, UserAction, UpdateType } from '../mock/setup.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointListView from '../view/point-list-view.js';
 
@@ -90,7 +90,11 @@ export default class PointPresenter {
   };
 
   #handleEditClickFormSubmit = (point) => {
-    this.#changeData(point);
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      point,
+    );
     this.#replaceFormToPoint();
   };
 
@@ -101,6 +105,9 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite}); // меняет значение isFavorite на противоположное
+    this.#changeData(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite});
   };
 }

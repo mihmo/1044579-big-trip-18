@@ -77,20 +77,6 @@ const createRandomId = () => {
   };
 };
 
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 const filter = {
   [FilterType.ALL]: (points) => points,
   [FilterType.FUTURE]: (points) => points.filter((point) => dayjs().isBefore(point.dateFrom) || dayjs().isBefore(point.dateFrom)),
@@ -117,4 +103,4 @@ const sortPointPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
 export { getRandomInteger, getRandomElementsFromArray, humanizeDateHHmm,
   humanizeDateMMMDD, humanizeDateDDMMYYHHmm, humanizeDateDDHHmm,
   setCapitalLetter, getTripInfo, declOfNumbers, createRandomId,
-  updateItem, sortPointsDate, sortPointTime, sortPointPrice, filter };
+  sortPointsDate, sortPointTime, sortPointPrice, filter };

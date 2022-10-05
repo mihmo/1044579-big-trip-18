@@ -6,6 +6,8 @@ import PointListView from '../view/point-list-view.js';
 export default class PointPresenter {
   #contentList = null;
   #point = null;
+  #offers = null;
+  #destinations = null;
   #changeData = null;
   #changeMode = null;
   #mode = Mode.DEFAULT;
@@ -18,14 +20,16 @@ export default class PointPresenter {
     this.#changeMode = changeMode;
   }
 
-  init = (point) => {
+  init = (point, offers, destinations) => {
     this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
 
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
-    this.#pointComponent = new PointListView(point);
-    this.#pointEditComponent = new PointEditView(point);
+    this.#pointComponent = new PointListView(point, this.#offers, this.#destinations );
+    this.#pointEditComponent = new PointEditView(point, this.#offers, this.#destinations);
 
     this.#pointComponent.setEditClickHandler(this.#handleEditClick);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);

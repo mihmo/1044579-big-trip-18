@@ -1,4 +1,4 @@
-import { MIN_ID, MAX_ID, FilterType } from './mock/setup.js';
+import { FilterType } from './mock/setup.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
@@ -52,12 +52,18 @@ const setCapitalLetter = (str) => {
   return str[0].toUpperCase() + str.slice(1);
 };
 
-const getTripInfo = (points) => {
-  const pointsSequence = points.slice(0);
+const getTripInfo = (pointsModel) => {
+  const pointsSequence = pointsModel.points.slice(0);
   let tripCost = 0;
   pointsSequence.sort((a, b) => dayjs(a.dateFrom).isAfter(b.dateFrom) ? 1 : -1).forEach((point) => {
-    point.offers.forEach((offer) => {
-      tripCost += Number(offer.price);
+    pointsModel.offers.forEach((offersByType) => {
+      if (offersByType.type === point.type) {
+        offersByType.offers.forEach((offerByType) => {
+          if (point.offers.includes(offerByType.id)) {
+            tripCost += Number(offerByType.price);
+          }
+        });
+      }
     });
     tripCost += Math.abs(Number(point.basePrice));
   });

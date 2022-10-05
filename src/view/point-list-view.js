@@ -1,8 +1,7 @@
-import { destinations } from '../mock/destination.js';
 import { humanizeDateHHmm, humanizeDateMMMDD, humanizeDateDDHHmm } from '../utils.js';
 import AbstractView from '../framework/view/abstract-view.js';
 
-const listPointTemplate = (point) => {
+const listPointTemplate = (point, offersByType, destinations) => {
   const { dateFrom, dateTo, type, destination, basePrice, offers, isFavorite } = point;
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : '';
@@ -17,14 +16,25 @@ const listPointTemplate = (point) => {
 
   const createOfferTemplate = () => {
     let offersTemplate = '';
+    let offersBySelectedType = [];
+    offersByType.forEach((offerByType) => {
+      if (offerByType.type === type) {
+        offersBySelectedType = offerByType.offers;
+      }
+    });
     if (offers.length !== 0) {
-      offersTemplate = offers.map((offer) => `
-      <li class="event__offer">
-        <span class="event__offer-title">${offer.title}</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
-      </li>
-      `).join(' ');
+      offers.forEach((offerId) => {
+        offersBySelectedType.forEach((offer) => {
+          if (offerId === offer.id) {
+            offersTemplate += `
+              <li class="event__offer">
+               <span class="event__offer-title">${offer.title}</span>
+               &plus;&euro;&nbsp;
+               <span class="event__offer-price">${offer.price}</span>
+              </li>`;
+          }
+        });
+      });
     }
     return offersTemplate;
   };
@@ -68,14 +78,18 @@ const listPointTemplate = (point) => {
 
 export default class PointListView extends AbstractView {
   #point = null;
+  #offersByType = null;
+  #destinations = null;
 
-  constructor(point) {
+  constructor(point, offersByType, destinations) {
     super();
     this.#point = point;
+    this.#offersByType = offersByType;
+    this.#destinations = destinations;
   }
 
   get template() {
-    return listPointTemplate(this.#point);
+    return listPointTemplate(this.#point, this.#offersByType, this.#destinations);
   }
 
   setEditClickHandler = (callback) => {

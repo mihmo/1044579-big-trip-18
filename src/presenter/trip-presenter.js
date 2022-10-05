@@ -59,12 +59,12 @@ export default class TripPresenter {
   createPoint = (callback) => {
     this.#currentSortType = SortType.DEFAULT;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
-    this.#newPointPresenter.init(callback);
+    this.#newPointPresenter.init(callback, this.#pointsModel.offers, this.#pointsModel.destinations);
   };
 
   #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(this.#contentListComponent.element, this.#handleViewAction, this.#handleModeChange); // передаем контейнер, обработчик изменения, обработчик изменения вида карточки
-    pointPresenter.init(point);
+    pointPresenter.init(point, this.#pointsModel.offers, this.#pointsModel.destinations);
     this.#pointsPresenter.set(point.id, pointPresenter);
   };
 
@@ -91,7 +91,7 @@ export default class TripPresenter {
 
   #renderTripInfo = () => {
     const siteMainTripElement = document.querySelector('.trip-main');
-    const tripInfo = generateTripInfo(this.points);
+    const tripInfo = generateTripInfo(this.#pointsModel);
     this.#tripInfoComponent = new TripInfoView(tripInfo);
     render(this.#tripInfoComponent, siteMainTripElement, RenderPosition.AFTERBEGIN);
   };
@@ -172,8 +172,7 @@ export default class TripPresenter {
       return;
     }
 
-    const points = this.points;
-    const pointCount = points.length;
+    const pointCount = this.points.length;
 
     if (pointCount === 0) {
       this.#renderEmptyContentList();

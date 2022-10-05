@@ -1,6 +1,7 @@
 import Observable from '../framework/observable.js';
 // import { generatePoint } from '../mock/point.js';
 // import { POINT_COUNT } from '../mock/setup.js';
+import {UpdateType} from '../mock/setup.js';
 
 export default class PointsModel extends Observable {
   // #points = Array.from({ length: POINT_COUNT }, generatePoint);
@@ -28,6 +29,7 @@ export default class PointsModel extends Observable {
     } catch(err) {
       this.#points = [];
     }
+    this._notify(UpdateType.INIT);
   };
 
   updatePoint = (updateType, update) => {

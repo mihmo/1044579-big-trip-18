@@ -5,7 +5,7 @@ import FilterModel from './model/filter-model.js';
 import PointsApiService from './points-api-service.js';
 
 const AUTHORIZATION = 'Basic hS2sfS44wcl1sa2jM1';
-const END_POINT = 'https://18.ecmascript.pages.academy/big-trip/';
+const END_POINT = 'https://18.ecmascript.pages.academy/big-trip';
 
 const pageBodyElement = document.querySelector('.page-body__page-main');
 const eventsElement = pageBodyElement.querySelector('.trip-events');

@@ -1,10 +1,11 @@
 import dayjs from 'dayjs';
 
 const NewPoint = {
+  destination: 0,
   dateFrom: dayjs(),
   dateTo: dayjs(),
   type: 'flight',
-  basePrice: 0,
+  basePrice: '',
   offers: [],
 };
 
@@ -40,6 +41,11 @@ const UpdateType = {
   INIT: 'INIT',
 };
 
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1500,
+};
+
 export {
   NewPoint,
   maxCitiesTitles,
@@ -47,5 +53,6 @@ export {
   Mode,
   SortType,
   UserAction,
-  UpdateType
+  UpdateType,
+  TimeLimit
 };

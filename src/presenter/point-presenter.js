@@ -6,6 +6,8 @@ import PointListView from '../view/point-list-view.js';
 export default class PointPresenter {
   #contentList = null;
   #point = null;
+  #offers = null;
+  #destinations = null;
   #changeData = null;
   #changeMode = null;
   #mode = Mode.DEFAULT;
@@ -18,20 +20,17 @@ export default class PointPresenter {
     this.#changeMode = changeMode;
   }
 
-  init = (point) => {
+  init = (point, offers, destinations) => {
     this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
 
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
-    this.#pointComponent = new PointListView(point);
-    this.#pointEditComponent = new PointEditView(point);
-
+    this.#pointComponent = new PointListView(point, this.#offers, this.#destinations );
     this.#pointComponent.setEditClickHandler(this.#handleEditClick);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    this.#pointEditComponent.setFormSubmitHandler(this.#handleEditClickFormSubmit);
-    this.#pointEditComponent.setEditClickHandler(this.#handleEditCloseClick);
-    this.#pointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#contentList);
@@ -83,6 +82,10 @@ export default class PointPresenter {
   };
 
   #handleEditClick = () => {
+    this.#pointEditComponent = new PointEditView(this.#point, this.#offers, this.#destinations);
+    this.#pointEditComponent.setFormSubmitHandler(this.#handleEditClickFormSubmit);
+    this.#pointEditComponent.setEditClickHandler(this.#handleEditCloseClick);
+    this.#pointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
     this.#replacePointToForm();
   };
 

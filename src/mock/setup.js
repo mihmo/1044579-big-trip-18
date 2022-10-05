@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const POINT_COUNT = 4;
 
 const CITY_DESC = [
@@ -23,6 +25,14 @@ const TYPES = [
   'sightseeing',
   'restaurant'
 ];
+
+const NewPoint = {
+  dateFrom: dayjs(),
+  dateTo: dayjs(),
+  type: TYPES[0],
+  basePrice: 0,
+  offers: [],
+};
 
 const EXTRA_OFFERS = [
   'Order Uber',
@@ -66,11 +76,24 @@ const SortType = {
   PRICE: 'price',
 };
 
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 export {
   POINT_COUNT,
   CITY_DESC,
   CITIES,
   TYPES,
+  NewPoint,
   EXTRA_OFFERS,
   offerPrice,
   basePrice,
@@ -79,5 +102,7 @@ export {
   maxShowTitleCities,
   FilterType,
   Mode,
-  SortType
+  SortType,
+  UserAction,
+  UpdateType
 };

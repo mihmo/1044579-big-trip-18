@@ -15,14 +15,19 @@ const listPointTemplate = (point) => {
     }
   };
 
-  const createOfferTemplate = () => offers
-    .map((offer) => `
+  const createOfferTemplate = () => {
+    let offersTemplate = '';
+    if (offers.length !== 0) {
+      offersTemplate = offers.map((offer) => `
       <li class="event__offer">
-       <span class="event__offer-title">${offer.title}</span>
-       &plus;&euro;&nbsp;
-       <span class="event__offer-price">${offer.price}</span>
+        <span class="event__offer-title">${offer.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
       </li>
-    `).join(' ');
+      `).join(' ');
+    }
+    return offersTemplate;
+  };
 
   return (`
    <li class="trip-events__item">
@@ -41,7 +46,7 @@ const listPointTemplate = (point) => {
         <p class="event__duration">${humanizeDateDDHHmm(dateFrom, dateTo)}</p>
       </div>
       <p class="event__price">
-        €&nbsp;<span class="event__price-value">${basePrice}</span>
+        €&nbsp;<span class="event__price-value">${Number(basePrice)}</span>
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">

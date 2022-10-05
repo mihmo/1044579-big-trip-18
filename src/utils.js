@@ -14,7 +14,7 @@ const getRandomInteger = (a = 0, b = 1) => {
 //Функция для получения случайного массива из исходного массива
 const getRandomElementsFromArray = (arr) => {
   const maxLength = arr.length;
-  const lengthOfArray = getRandomInteger(1, maxLength);
+  const lengthOfArray = getRandomInteger(0, maxLength);
   const elements = [];
   for (let i = elements.length; i < lengthOfArray; i++) {
     const indexOfElement = getRandomInteger(0, maxLength - 1);
@@ -55,10 +55,13 @@ const setCapitalLetter = (str) => {
 const getTripInfo = (points) => {
   const pointsSequence = points.slice(0);
   let tripCost = 0;
-  pointsSequence.sort((a,b) => dayjs(a.dateFrom).isAfter(b.dateFrom) ? 1 : -1).forEach((point) => {
-    tripCost += point.basePrice;
+  pointsSequence.sort((a, b) => dayjs(a.dateFrom).isAfter(b.dateFrom) ? 1 : -1).forEach((point) => {
+    point.offers.forEach((offer) => {
+      tripCost += Number(offer.price);
+    });
+    tripCost += Math.abs(Number(point.basePrice));
   });
-  return { pointsSequence, tripCost};
+  return { pointsSequence, tripCost };
 };
 
 const createRandomId = () => {
@@ -77,24 +80,10 @@ const createRandomId = () => {
   };
 };
 
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 const filter = {
   [FilterType.ALL]: (points) => points,
-  [FilterType.FUTURE]: (points) => points.filter((point) => dayjs().isBefore(point.dateFrom) || dayjs().isBefore(point.dateFrom)),
-  [FilterType.PAST]: (points) => points.filter((point) => dayjs().isAfter(point.dateFrom) && dayjs().isAfter(point.dateFrom)),
+  [FilterType.FUTURE]: (points) => points.filter((point) => dayjs().isBefore(point.dateFrom) || dayjs().isBefore(point.dateTo)),
+  [FilterType.PAST]: (points) => points.filter((point) => dayjs().isAfter(point.dateFrom)),
 };
 
 const getWeightForToday = (dateA, dateB) => {
@@ -117,4 +106,4 @@ const sortPointPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
 export { getRandomInteger, getRandomElementsFromArray, humanizeDateHHmm,
   humanizeDateMMMDD, humanizeDateDDMMYYHHmm, humanizeDateDDHHmm,
   setCapitalLetter, getTripInfo, declOfNumbers, createRandomId,
-  updateItem, sortPointsDate, sortPointTime, sortPointPrice, filter };
+  sortPointsDate, sortPointTime, sortPointPrice, filter };

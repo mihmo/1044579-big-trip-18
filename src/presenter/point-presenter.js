@@ -1,5 +1,5 @@
 import {render, replace, remove } from '../framework/render.js';
-import { Mode } from '../mock/setup.js';
+import { Mode, UserAction, UpdateType } from '../mock/setup.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointListView from '../view/point-list-view.js';
 
@@ -18,9 +18,6 @@ export default class PointPresenter {
     this.#changeMode = changeMode;
   }
 
-  // const pointComponent = new PointListView(point);
-  // const pointEditComponent = new PointEditView(point);
-
   init = (point) => {
     this.#point = point;
 
@@ -34,6 +31,7 @@ export default class PointPresenter {
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#pointEditComponent.setFormSubmitHandler(this.#handleEditClickFormSubmit);
     this.#pointEditComponent.setEditClickHandler(this.#handleEditCloseClick);
+    this.#pointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#contentList);
@@ -81,7 +79,6 @@ export default class PointPresenter {
       evt.preventDefault();
       this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
 
@@ -89,8 +86,19 @@ export default class PointPresenter {
     this.#replacePointToForm();
   };
 
-  #handleEditClickFormSubmit = () => {
-    // this.#changeData(this.#point);
+  #handleEditClickFormSubmit = (point) => {
+    const updatePoint = {...point};
+    delete updatePoint.type;
+    const currentPoint = {...this.#point};
+    delete currentPoint.type;
+
+    const isMinorUpdate = JSON.stringify(updatePoint) !== JSON.stringify(currentPoint);
+
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      point,
+    );
     this.#replaceFormToPoint();
   };
 
@@ -101,6 +109,18 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite}); // меняет значение isFavorite на противоположное
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite});
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#changeData(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 }

@@ -1,25 +1,29 @@
-import { render, RenderPosition } from './framework/render.js';
-import FilterView from './view/filter-view.js';
 import TripPresenter from './presenter/trip-presenter.js';
-import TripInfoView from './view/trip-info-view.js';
+import FilterPresenter from './presenter/filter-presenter.js';
 import PointsModel from './model/points-model.js';
-import {generateFilter} from './mock/filter.js';
-import {generateTripInfo} from './mock/trip-info.js';
+import FilterModel from './model/filter-model.js';
 
-const siteMainTripElement = document.querySelector('.trip-main');
-const siteFilterElement = siteMainTripElement.querySelector('.trip-controls__filters');
+
 const pageBodyElement = document.querySelector('.page-body__page-main');
 const eventsElement = pageBodyElement.querySelector('.trip-events');
+const siteFilterElement = document.querySelector('.trip-controls__filters');
+const newEventBtn = document.querySelector('.trip-main__event-add-btn');
 
 const pointsModel = new PointsModel();
-const tripPresenter = new TripPresenter(eventsElement, pointsModel);
+const filterModel = new FilterModel();
+const tripPresenter = new TripPresenter(eventsElement, pointsModel, filterModel);
+const filterPresenter = new FilterPresenter(siteFilterElement, filterModel, pointsModel);
 
-if (pointsModel.points.length) {
-  const filters = generateFilter(pointsModel.points);
-  const tripInfo = generateTripInfo(pointsModel.points);
+const handleNewEventFormClose = () => {
+  newEventBtn.disabled = false;
+};
 
-  render(new TripInfoView(tripInfo), siteMainTripElement, RenderPosition.AFTERBEGIN);
-  render(new FilterView(filters), siteFilterElement);
-}
+const handleNewEventButtonClick = () => {
+  tripPresenter.createPoint(handleNewEventFormClose);
+  newEventBtn.disabled = true;
+};
+
+newEventBtn.addEventListener('click', handleNewEventButtonClick);
 
 tripPresenter.init();
+filterPresenter.init();

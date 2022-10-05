@@ -30,3 +30,4 @@ newEventBtn.addEventListener('click', handleNewEventButtonClick);
 
 tripPresenter.init();
 filterPresenter.init();
+pointsModel.init();

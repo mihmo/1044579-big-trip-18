@@ -14,7 +14,7 @@ const getRandomInteger = (a = 0, b = 1) => {
 //Функция для получения случайного массива из исходного массива
 const getRandomElementsFromArray = (arr) => {
   const maxLength = arr.length;
-  const lengthOfArray = getRandomInteger(1, maxLength);
+  const lengthOfArray = getRandomInteger(0, maxLength);
   const elements = [];
   for (let i = elements.length; i < lengthOfArray; i++) {
     const indexOfElement = getRandomInteger(0, maxLength - 1);
@@ -55,10 +55,13 @@ const setCapitalLetter = (str) => {
 const getTripInfo = (points) => {
   const pointsSequence = points.slice(0);
   let tripCost = 0;
-  pointsSequence.sort((a,b) => dayjs(a.dateFrom).isAfter(b.dateFrom) ? 1 : -1).forEach((point) => {
+  pointsSequence.sort((a, b) => dayjs(a.dateFrom).isAfter(b.dateFrom) ? 1 : -1).forEach((point) => {
+    point.offers.forEach((offer) => {
+      tripCost += Number(offer.price);
+    });
     tripCost += Number(point.basePrice);
   });
-  return { pointsSequence, tripCost};
+  return { pointsSequence, tripCost };
 };
 
 const createRandomId = () => {

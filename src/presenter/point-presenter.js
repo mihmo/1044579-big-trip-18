@@ -91,9 +91,18 @@ export default class PointPresenter {
   };
 
   #handleEditClickFormSubmit = (point) => {
+    const updatePoint = {};
+    Object.assign(updatePoint, point);
+    delete updatePoint.type;
+    const currentPoint = {};
+    Object.assign(currentPoint, this.#point);
+    delete currentPoint.type;
+
+    const isMinorUpdate = JSON.stringify(updatePoint) !== JSON.stringify(currentPoint);
+
     this.#changeData(
       UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       point,
     );
     this.#replaceFormToPoint();

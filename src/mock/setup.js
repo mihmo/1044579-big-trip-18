@@ -1,12 +1,13 @@
 import dayjs from 'dayjs';
 
 const NewPoint = {
-  destination: 0,
+  destination: '',
   dateFrom: dayjs(),
   dateTo: dayjs(),
   type: 'flight',
   basePrice: '',
   offers: [],
+  isNewPoint: true,
 };
 
 const maxCitiesTitles = 3;

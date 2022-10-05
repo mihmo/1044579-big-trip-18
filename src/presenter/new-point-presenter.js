@@ -48,7 +48,6 @@ export default class NewPointPresenter {
       this.#pointEditComponent.updateElement({
         isDisabled: false,
         isSaving: false,
-        isDeleting: false,
       });
     };
 
@@ -69,7 +68,7 @@ export default class NewPointPresenter {
 
 
   #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (!evt.target.classList.contains('event__input--time') && (evt.key === 'Escape' || evt.key === 'Esc')) {
       evt.preventDefault();
       this.destroy();
     }

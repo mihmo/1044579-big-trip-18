@@ -1,12 +1,13 @@
 import { humanizeDateHHmm, humanizeDateMMMDD, humanizeDateDDHHmm } from '../utils.js';
 import AbstractView from '../framework/view/abstract-view.js';
+import he from 'he';
 
 const listPointTemplate = (point, offersByType, destinations) => {
   const { dateFrom, dateTo, type, destination, basePrice, offers, isFavorite } = point;
 
   const favoriteClassName = isFavorite ? 'event__favorite-btn--active' : '';
 
-  const getDestinationName = () => destinations.find((dest) => destination === dest.id).name;
+  const getDestinationName = () => he.encode(destinations.find((dest) => destination === dest.id).name);
 
   const createOfferTemplate = () => {
     const offersBySelectedType = offersByType.find((offerByType) => offerByType.type === type).offers;
@@ -45,7 +46,7 @@ const listPointTemplate = (point, offersByType, destinations) => {
         <p class="event__duration">${humanizeDateDDHHmm(dateFrom, dateTo)}</p>
       </div>
       <p class="event__price">
-        €&nbsp;<span class="event__price-value">${Math.abs(Number(basePrice))}</span>
+        €&nbsp;<span class="event__price-value">${basePrice}</span>
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers ${!offersTemplate ? 'visually-hidden' : ''}">

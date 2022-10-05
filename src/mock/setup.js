@@ -41,6 +41,11 @@ const UpdateType = {
   INIT: 'INIT',
 };
 
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1500,
+};
+
 export {
   NewPoint,
   maxCitiesTitles,
@@ -48,5 +53,6 @@ export {
   Mode,
   SortType,
   UserAction,
-  UpdateType
+  UpdateType,
+  TimeLimit
 };

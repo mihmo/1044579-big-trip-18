@@ -4,7 +4,7 @@ const NewPoint = {
   dateFrom: dayjs(),
   dateTo: dayjs(),
   type: 'flight',
-  basePrice: 0,
+  basePrice: '',
   offers: [],
 };
 

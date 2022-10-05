@@ -97,7 +97,7 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
             <span class="visually-hidden">Price</span>
             €
           </label>
-          <input class="event__input  event__input--price" id="event-price-${destination}" type="number" name="event-price" value="${Math.abs(Number(basePrice))}" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189" onFocus="this.select()">
+          <input class="event__input  event__input--price" id="event-price-${destination}" type="number" name="event-price" value="${basePrice}" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189" onFocus="this.select()" required>
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -107,7 +107,7 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
         </button>
       </header>
       <section class="event__details">
-        <section class="event__section  event__section--offers ${!offersTemplate ? 'visually-hidden' : '' }" >
+        <section class="event__section  event__section--offers ${!offersTemplate ? 'visually-hidden' : ''}" >
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
           ${offersTemplate}
@@ -253,9 +253,13 @@ export default class PointEditView extends AbstractStatefulView {
 
   #eventPriceChangeHandler = (evt) => {
     evt.preventDefault();
-    this._setState({
-      basePrice: evt.target.value,
-    });
+    if (evt.target.value > 0) {
+      this._setState({
+        basePrice: evt.target.value,
+      });
+    } else {
+      evt.target.value = '';
+    }
   };
 
   #eventDestinationInputHandler = (evt) => {

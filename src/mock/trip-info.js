@@ -5,27 +5,11 @@ export const generateTripInfo = (pointsModel) => {
   const tripInfo = getTripInfo(pointsModel);
   const mockTripInfo = {};
   if (tripInfo.pointsSequence.length > maxCitiesTitles) {
-    let startPoint = '';
-    let endPoint = '';
-    for (const dest of pointsModel.destinations) {
-      if (tripInfo.pointsSequence[0].destination === dest.id) {
-        startPoint = dest.name;
-      }
-    }
-    for (const dest of pointsModel.destinations) {
-      if (tripInfo.pointsSequence[tripInfo.pointsSequence.length - 1].destination === dest.id) {
-        endPoint = dest.name;
-      }
-    }
+    const startPoint = pointsModel.destinations.find((dest) => tripInfo.pointsSequence[0].destination === dest.id).name;
+    const endPoint = pointsModel.destinations.find((dest) => tripInfo.pointsSequence[tripInfo.pointsSequence.length - 1].destination === dest.id).name;
     mockTripInfo['tripTitle'] = `${startPoint} ... ${endPoint}`;
   } else {
-    const tripTitle = tripInfo.pointsSequence.map((point) => {
-      for (const dest of pointsModel.destinations) {
-        if (point.destination === dest.id) {
-          return dest.name;
-        }
-      }
-    });
+    const tripTitle = tripInfo.pointsSequence.map((point) => pointsModel.destinations.find((dest) => point.destination === dest.id).name);
     mockTripInfo['tripTitle'] = tripTitle.join(' — ');
   }
 

@@ -55,36 +55,34 @@ const setCapitalLetter = (str) => {
 const getTripInfo = (pointsModel) => {
   const pointsSequence = pointsModel.points.slice(0);
   let tripCost = 0;
-  pointsSequence.sort((a, b) => dayjs(a.dateFrom).isAfter(b.dateFrom) ? 1 : -1).forEach((point) => {
-    pointsModel.offers.forEach((offersByType) => {
-      if (offersByType.type === point.type) {
-        offersByType.offers.forEach((offerByType) => {
-          if (point.offers.includes(offerByType.id)) {
-            tripCost += Number(offerByType.price);
-          }
-        });
-      }
+  pointsSequence.sort((a, b) => dayjs(a.dateFrom).isAfter(b.dateFrom) ? 1 : -1)
+    .forEach((point) => {
+      const offersByType = pointsModel.offers.find((offer) => offer.type === point.type).offers;
+      offersByType.forEach((offerByType) => {
+        if (point.offers.includes(offerByType.id)) {
+          tripCost += Number(offerByType.price);
+        }
+      });
+      tripCost += Math.abs(Number(point.basePrice));
     });
-    tripCost += Math.abs(Number(point.basePrice));
-  });
   return { pointsSequence, tripCost };
 };
 
-const createRandomId = () => {
-  const previousValues = [];
-  return function () {
-    let currentValue = getRandomInteger(MIN_ID, MAX_ID);
-    if (previousValues.length >= (MAX_ID - MIN_ID + 1)) {
-      // console.error(`Перебраны все ID из диапазона от ${ min } до ${ max }`);
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(MIN_ID, MAX_ID);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-};
+// const createRandomId = () => {
+//   const previousValues = [];
+//   return function () {
+//     let currentValue = getRandomInteger(MIN_ID, MAX_ID);
+//     if (previousValues.length >= (MAX_ID - MIN_ID + 1)) {
+//       // console.error(`Перебраны все ID из диапазона от ${ min } до ${ max }`);
+//       return null;
+//     }
+//     while (previousValues.includes(currentValue)) {
+//       currentValue = getRandomInteger(MIN_ID, MAX_ID);
+//     }
+//     previousValues.push(currentValue);
+//     return currentValue;
+//   };
+// };
 
 const filter = {
   [FilterType.ALL]: (points) => points,
@@ -111,5 +109,5 @@ const sortPointPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
 
 export { getRandomInteger, getRandomElementsFromArray, humanizeDateHHmm,
   humanizeDateMMMDD, humanizeDateDDMMYYHHmm, humanizeDateDDHHmm,
-  setCapitalLetter, getTripInfo, declOfNumbers, createRandomId,
+  setCapitalLetter, getTripInfo, declOfNumbers,
   sortPointsDate, sortPointTime, sortPointPrice, filter };

@@ -2,6 +2,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeDateDDMMYYHHmm, setCapitalLetter } from '../utils.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { nanoid } from 'nanoid';
 
 const editPointTemplate = (point, offersByType, destinations, cities) => {
   const { dateFrom, dateTo, type, destination, basePrice, offers } = point;
@@ -11,14 +12,7 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
   const isOfferChecked = (offer) => offers.includes(offer.id) ? 'checked' : '';
 
   const createEditOfferTemplate = () => {
-    let offersBySelectedType = [];
-    if (offersByType) {
-      offersByType.forEach((offerByType) => {
-        if (offerByType.type === type) {
-          offersBySelectedType = offerByType.offers;
-        }
-      });
-    }
+    const offersBySelectedType = offersByType.find((offerByType) => offerByType.type === type).offers;
 
     return offersBySelectedType.map((offer) => `
       <div class="event__offer-selector">
@@ -35,13 +29,8 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
   const offersTemplate = createEditOfferTemplate();
 
   const createPhotoTemplate = (destinationId) => {
-    let template = '';
-    destinations.forEach((dest) => {
-      if (dest.id === destinationId) {
-        template = dest.pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('');
-      }
-    });
-    return template;
+    const currentDest = destinations.find((dest) => dest.id === destinationId);
+    return currentDest ? currentDest.pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('') : '';
   };
 
   const photoTemplate = createPhotoTemplate(destination);
@@ -49,27 +38,23 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
   const createEditTypeTemplate = (currentType) =>
     types.map((iterationType) => `
       <div class="event__type-item">
-        <input id="event-type-${iterationType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${iterationType}" ${currentType === iterationType ? 'checked' : ''}>
-        <label class="event__type-label  event__type-label--${iterationType}" for="event-type-${iterationType}-1">${setCapitalLetter(iterationType)}</label>
+      <input id="event-type-${iterationType}-${destination}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${iterationType}" ${currentType === iterationType ? 'checked' : ''}>
+      <label class="event__type-label  event__type-label--${iterationType}" for="event-type-${iterationType}-${destination}">${setCapitalLetter(iterationType)}</label>
       </div>
     `).join('');
 
   const typesTemplate = createEditTypeTemplate(type);
 
   const createDestinationListTemplate = (destinationId) => {
-    let destName = '';
-    destinations.forEach((dest) => {
-      if (dest.id === destinationId) {
-        destName = dest.name;
-      }
-    });
+    const destName = destinations.find((dest) => dest.id === destinationId);
+    destinationId = destinationId !== undefined ? destinationId : destinationId = nanoid();
 
     return `
       <label class="event__label  event__type-output" for="event-destination-${destinationId}">${type}</label>
-      <input class="event__input  event__input--destination" id="event-destination-${destinationId}" type="text" name="event-destination" value="${destName}" list="destination-list-${destinationId}" onFocus="this.select()" required>
+      <input class="event__input  event__input--destination" id="event-destination-${destinationId}" type="text" name="event-destination" value="${destName ? destName.name : ''}" list="destination-list-${destinationId}" onFocus="this.select()" required>
       <datalist id="destination-list-${destinationId}">
         ${cities.map((city) => `
-        <option value="${city}" ${destName === city ? 'selected' : ''}></option>
+        <option value="${city}" ${destName && destName.name === city ? 'selected' : ''}></option>
         `).join('')}
       </datalist>`;
   };
@@ -81,11 +66,11 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
      <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
-          <label class="event__type  event__type-btn" for="event-type-toggle-1">
+          <label class="event__type  event__type-btn" for="event-type-toggle-${destination}">
             <span class="visually-hidden">Choose event type</span>
             <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
           </label>
-          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+          <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${destination}" type="checkbox">
 
           <div class="event__type-list">
             <fieldset class="event__type-group">
@@ -100,19 +85,19 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
         </div>
 
         <div class="event__field-group  event__field-group--time">
-          <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeDateDDMMYYHHmm(dateFrom)}">
+          <label class="visually-hidden" for="event-start-time-${destination}">From</label>
+          <input class="event__input  event__input--time" id="event-start-time-${destination}" type="text" name="event-start-time" value="${humanizeDateDDMMYYHHmm(dateFrom)}">
           —
-          <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${humanizeDateDDMMYYHHmm(dateTo)}">
+          <label class="visually-hidden" for="event-end-time-${destination}">To</label>
+          <input class="event__input  event__input--time" id="event-end-time-${destination}" type="text" name="event-end-time" value="${humanizeDateDDMMYYHHmm(dateTo)}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
-          <label class="event__label" for="event-price-1">
+          <label class="event__label" for="event-price-${destination}">
             <span class="visually-hidden">Price</span>
             €
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${Math.abs(Number(basePrice))}" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189" onFocus="this.select()">
+          <input class="event__input  event__input--price" id="event-price-${destination}" type="number" name="event-price" value="${Math.abs(Number(basePrice))}" onkeydown="return event.keyCode !== 69 && event.keyCode !== 189" onFocus="this.select()">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -122,9 +107,8 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
         </button>
       </header>
       <section class="event__details">
-        <section class="event__section  event__section--offers">
+        <section class="event__section  event__section--offers ${!offersTemplate ? 'visually-hidden' : '' }" >
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
           <div class="event__available-offers">
           ${offersTemplate}
           </div>

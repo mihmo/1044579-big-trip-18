@@ -29,7 +29,7 @@ const editPointTemplate = (point) => {
       `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`)
       .join('');
 
-  const photoTemplate = destination !== undefined ? createPhotoTemplate(destinations[destination].pictures) : '';
+  const photoTemplate = destinations[destination] !== undefined ? createPhotoTemplate(destinations[destination].pictures) : '';
 
   const createEditTypeTemplate = (currentType) =>
     TYPES.map((iterationType) => `
@@ -52,7 +52,7 @@ const editPointTemplate = (point) => {
        `).join('')}
     </datalist>`;
 
-  const destListTemplate = createDestinationListTemplate(destination !== undefined ? destinations[destination].name : '');
+  const destListTemplate = createDestinationListTemplate(destinations[destination] !== undefined ? destinations[destination].name : '');
 
   return (`
     <li class="trip-events__item">
@@ -111,7 +111,7 @@ const editPointTemplate = (point) => {
 
         <section class="event__section  event__section--destination ${destination === undefined ? 'visually-hidden' : ''}">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${destination !== undefined ? destinations[destination].description : ''}</p>
+          <p class="event__destination-description">${destinations[destination] !== undefined ? destinations[destination].description : ''}</p>
           <div class="event__photos-container">
             <div class="event__photos-tape">
               ${photoTemplate}

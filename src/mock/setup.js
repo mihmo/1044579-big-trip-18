@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const POINT_COUNT = 4;
 
 const CITY_DESC = [
@@ -23,6 +25,14 @@ const TYPES = [
   'sightseeing',
   'restaurant'
 ];
+
+const NewPoint = {
+  dateFrom: dayjs(),
+  dateTo: dayjs(),
+  type: TYPES[0],
+  basePrice: 0,
+  offers: [],
+};
 
 const EXTRA_OFFERS = [
   'Order Uber',
@@ -83,6 +93,7 @@ export {
   CITY_DESC,
   CITIES,
   TYPES,
+  NewPoint,
   EXTRA_OFFERS,
   offerPrice,
   basePrice,

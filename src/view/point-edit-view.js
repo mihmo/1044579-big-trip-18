@@ -1,6 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeDateDDMMYYHHmm, setCapitalLetter } from '../utils.js';
-import { TYPES, CITIES } from '../mock/setup.js';
+import { TYPES, CITIES, NewPoint } from '../mock/setup.js';
 import { destinations } from '../mock/destination.js';
 import { mockOffers, mockOffersByType } from '../mock/offers.js';
 import flatpickr from 'flatpickr';
@@ -31,7 +31,7 @@ const editPointTemplate = (point) => {
       `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`)
       .join('');
 
-  const photoTemplate = createPhotoTemplate(destinations[destination].pictures);
+  const photoTemplate = destination ? createPhotoTemplate(destinations[destination].pictures) : '';
 
   const createEditTypeTemplate = (currentType) =>
     TYPES.map((iterationType) => `
@@ -47,14 +47,14 @@ const editPointTemplate = (point) => {
     <label class="event__label  event__type-output" for="event-destination-1">
     ${type}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${selectedCity}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${selectedCity}" list="destination-list-1" required>
     <datalist id="destination-list-1">
     ${CITIES.map((city) => `
     <option value="${city}" ${selectedCity === city ? 'selected' : ''}></option>
        `).join('')}
     </datalist>`;
 
-  const destListTemplate = createDestinationListTemplate(destinations[destination].name);
+  const destListTemplate = createDestinationListTemplate(destination !== undefined ? destinations[destination].name : '') ;
 
   return (`
     <li class="trip-events__item">
@@ -113,7 +113,7 @@ const editPointTemplate = (point) => {
 
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${destinations[destination].description}</p>
+          <p class="event__destination-description">${ destination !== undefined ? destinations[destination].description : ''}</p>
           <div class="event__photos-container">
             <div class="event__photos-tape">
               ${photoTemplate}
@@ -131,6 +131,11 @@ export default class PointEditView extends AbstractStatefulView {
 
   constructor(point) {
     super();
+
+    if (!point) {
+      point = NewPoint;
+    }
+
     this._state = PointEditView.parsePointToState(point);
     this.#setInnerHandlers();
     this.#setFromDatepicker();

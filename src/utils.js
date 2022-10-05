@@ -59,7 +59,7 @@ const getTripInfo = (points) => {
     point.offers.forEach((offer) => {
       tripCost += Number(offer.price);
     });
-    tripCost += Number(point.basePrice);
+    tripCost += Math.abs(Number(point.basePrice));
   });
   return { pointsSequence, tripCost };
 };

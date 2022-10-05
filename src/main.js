@@ -26,8 +26,10 @@ const handleNewEventButtonClick = () => {
   newEventBtn.disabled = true;
 };
 
-newEventBtn.addEventListener('click', handleNewEventButtonClick);
-
 tripPresenter.init();
 filterPresenter.init();
-pointsModel.init();
+pointsModel.init()
+  .finally(() => {
+    handleNewEventFormClose();
+    newEventBtn.addEventListener('click', handleNewEventButtonClick);
+  });

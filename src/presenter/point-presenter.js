@@ -18,9 +18,6 @@ export default class PointPresenter {
     this.#changeMode = changeMode;
   }
 
-  // const pointComponent = new PointListView(point);
-  // const pointEditComponent = new PointEditView(point);
-
   init = (point) => {
     this.#point = point;
 
@@ -90,11 +87,9 @@ export default class PointPresenter {
   };
 
   #handleEditClickFormSubmit = (point) => {
-    const updatePoint = {};
-    Object.assign(updatePoint, point);
+    const updatePoint = {...point};
     delete updatePoint.type;
-    const currentPoint = {};
-    Object.assign(currentPoint, this.#point);
+    const currentPoint = {...this.#point};
     delete currentPoint.type;
 
     const isMinorUpdate = JSON.stringify(updatePoint) !== JSON.stringify(currentPoint);

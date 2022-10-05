@@ -1,19 +1,17 @@
 import { render, RenderPosition, remove } from '../framework/render.js';
+import { filter, sortPointsDate, sortPointPrice, sortPointTime } from '../utils.js';
 import NewPointPresenter from './new-point-presenter.js';
 import ContentListView from '../view/content-list-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import PointPresenter from './point-presenter.js';
-import { filter } from '../utils.js';
 import TripInfoView from '../view/trip-info-view.js';
 import { generateTripInfo } from '../mock/trip-info.js';
 import SortView from '../view/sort-view.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../mock/setup.js';
-import { sortPointsDate, sortPointPrice, sortPointTime } from '../utils.js';
 
 export default class TripPresenter {
   #contentContainer = null;
   #pointsModel = null;
-  // #mainPoints = null;
   #filterModel = null;
 
   #contentListComponent = new ContentListView();
@@ -31,10 +29,9 @@ export default class TripPresenter {
     this.#contentContainer = contentContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
+    this.#newPointPresenter = new NewPointPresenter(this.#contentListComponent, this.#handleViewAction);
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
-    this.#newPointPresenter = new NewPointPresenter(this.#contentListComponent, this.#handleViewAction);
-
   }
 
   get points() {

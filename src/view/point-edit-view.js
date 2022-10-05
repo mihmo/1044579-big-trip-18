@@ -2,7 +2,6 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeDateDDMMYYHHmm, setCapitalLetter } from '../utils.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-// import { nanoid } from 'nanoid';
 
 const editPointTemplate = (point, offersByType, destinations, cities) => {
   const { dateFrom, dateTo, type, destination, basePrice, offers, isDisabled, isSaving, isDeleting } = point;

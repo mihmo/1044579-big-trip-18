@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 const NewPoint = {
+  destination: 0,
   dateFrom: dayjs(),
   dateTo: dayjs(),
   type: 'flight',

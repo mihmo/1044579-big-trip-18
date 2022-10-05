@@ -2,9 +2,11 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeDateDDMMYYHHmm, setCapitalLetter } from '../utils.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import he from 'he';
+import dayjs from 'dayjs';
 
 const editPointTemplate = (point, offersByType, destinations, cities) => {
-  const { dateFrom, dateTo, type, destination, basePrice, offers, isDisabled, isSaving, isDeleting } = point;
+  const { dateFrom, dateTo, type, destination, basePrice, offers, isDisabled, isSaving, isDeleting, isNewPoint } = point;
 
   const types = offersByType ? offersByType.map((offerByType) => offerByType.type) : '';
 
@@ -49,7 +51,7 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
 
     return `
       <label class="event__label  event__type-output" for="event-destination-${destinationId}">${type}</label>
-      <input class="event__input  event__input--destination" id="event-destination-${destinationId}" type="text" name="event-destination" value="${destName ? destName.name : ''}" list="destination-list-${destinationId}" onFocus="this.select()" required ${isDisabled ? 'disabled' : ''}>
+      <input class="event__input  event__input--destination" id="event-destination-${destinationId}" type="text" name="event-destination" value="${destName ? he.encode(destName.name) : ''}" list="destination-list-${destinationId}" onFocus="this.select()" required ${isDisabled ? 'disabled' : ''}>
       <datalist id="destination-list-${destinationId}">
         ${cities.map((city) => `
         <option value="${city}" ${destName && destName.name === city ? 'selected' : ''}></option>
@@ -58,6 +60,15 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
   };
 
   const destListTemplate = createDestinationListTemplate(destination);
+
+  const getResetBtnTitle = () => {
+    if (isNewPoint) {
+      return 'Cancel';
+    }
+    else {
+      return isDeleting ? 'Deleting...' : 'Delete';
+    }
+  };
 
   return (`
     <li class="trip-events__item">
@@ -99,7 +110,7 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-        <button class="event__reset-btn" type="reset">${isDeleting ? 'Deleting...' : 'Delete'}</button>
+        <button class="event__reset-btn" type="reset">${getResetBtnTitle()}</button>
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
         </button>
@@ -112,7 +123,7 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
           </div>
         </section>
 
-        <section class="event__section  event__section--destination ${destination === undefined ? 'visually-hidden' : ''}">
+        <section class="event__section  event__section--destination ${destination === '' ? 'visually-hidden' : ''}">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${destinations[destination] !== undefined ? destinations[destination].description : ''}</p>
           <div class="event__photos-container">
@@ -128,7 +139,8 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
 };
 
 export default class PointEditView extends AbstractStatefulView {
-  #datepicker = null;
+  #datepickerFrom = null;
+  #datepickerTo = null;
   #offersByType = null;
   #destinations = null;
   #cities = null;
@@ -140,8 +152,6 @@ export default class PointEditView extends AbstractStatefulView {
     this._state = PointEditView.parsePointToState(point);
     this.#cities = this.#destinations.map((dest) => dest.name);
     this.#setInnerHandlers();
-    this.#setFromDatepicker();
-    this.#setToDatepicker();
   }
 
   get template() {
@@ -151,9 +161,13 @@ export default class PointEditView extends AbstractStatefulView {
   removeElement = () => {
     super.removeElement();
 
-    if (this.#datepicker) {
-      this.#datepicker.destroy();
-      this.#datepicker = null;
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
     }
   };
 
@@ -182,9 +196,8 @@ export default class PointEditView extends AbstractStatefulView {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setEditClickHandler(this._callback.editClick);
-    this.#setFromDatepicker();
-    this.#setToDatepicker();
     this.setDeleteClickHandler(this._callback.deleteClick);
+    this.#setDatepickers();
   };
 
   #setInnerHandlers = () => {
@@ -199,44 +212,57 @@ export default class PointEditView extends AbstractStatefulView {
       .forEach((eventOffer) => eventOffer.addEventListener('change', this.#eventSelectOffersToggleHandler));
 
     this.element.querySelector('.event__input--price').addEventListener('change', this.#eventPriceChangeHandler);
+    this.#setDatepickers();
   };
 
   #dateStartHandler = ([userDateStart]) => {
-    this.updateElement({
+    if (userDateStart > this._state.dateTo) {
+      this._setState({
+        dateFrom: userDateStart,
+        dateTo: userDateStart,
+      });
+    }
+    this._setState({
       dateFrom: userDateStart,
     });
   };
 
   #dateEndHandler = ([userDateEnd]) => {
-    this.updateElement({
+    this._setState({
       dateTo: userDateEnd,
     });
   };
 
-  #setFromDatepicker = () => {
+  #setMinDateTo = () => {
+    this.#datepickerTo.set('minDate', this.#datepickerFrom.selectedDates[0]);
+    if (dayjs(this.#datepickerFrom.selectedDates[0]).isAfter(dayjs(this.#datepickerTo.selectedDates[0]))) {
+      this.#datepickerTo.setDate(this.#datepickerFrom.selectedDates[0]);
+    }
+  };
+
+  #setDatepickers = () => {
     const dateStartInput = this.element.querySelector('input[name="event-start-time"]');
-    this.#datepicker = flatpickr(
+    this.#datepickerFrom = flatpickr(
       dateStartInput,
       {
         enableTime: true,
         'time_24hr': true,
-        defaultDate: dateStartInput.value,
+        defaultDate: this._state.dateFrom.toISOString(),
         dateFormat: 'd/m/y H:i',
-        onClose: this.#dateStartHandler,
+        onChange: [this.#dateStartHandler, this.#setMinDateTo],
       },
     );
-  };
 
-  #setToDatepicker = () => {
     const dateEndInput = this.element.querySelector('input[name="event-end-time"]');
-    this.#datepicker = flatpickr(
+    this.#datepickerTo = flatpickr(
       dateEndInput,
       {
         enableTime: true,
         'time_24hr': true,
-        defaultDate: dateEndInput.value,
+        defaultDate: this._state.dateTo.toISOString(),
         dateFormat: 'd/m/y H:i',
-        onClose: this.#dateEndHandler,
+        minDate: this._state.dateFrom.toISOString(),
+        onChange: this.#dateEndHandler,
       },
     );
   };
@@ -311,7 +337,12 @@ export default class PointEditView extends AbstractStatefulView {
     const point = { ...state };
     delete point.isDisabled;
     delete point.isSaving;
-    delete point.isDeleting;
+    if (point.isDeleting) {
+      delete point.isDeleting;
+    }
+    if (point.isNewPoint) {
+      delete point.isNewPoint;
+    }
 
     return point;
   };

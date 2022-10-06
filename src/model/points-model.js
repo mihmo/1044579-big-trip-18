@@ -1,10 +1,7 @@
 import Observable from '../framework/observable.js';
-// import { generatePoint } from '../mock/point.js';
-// import { POINT_COUNT } from '../mock/setup.js';
 import { UpdateType } from '../mock/setup.js';
 
 export default class PointsModel extends Observable {
-  // #points = Array.from({ length: POINT_COUNT }, generatePoint);
   #points = [];
   #pointsApiService = null;
   #destinations = [];
@@ -13,11 +10,6 @@ export default class PointsModel extends Observable {
   constructor(pointsApiService) {
     super();
     this.#pointsApiService = pointsApiService;
-
-    // this.#pointsApiService.points.then((points) => {
-    //   console.log(points);
-    //   console.log(points.map(this.#adaptToClient));
-    // });
   }
 
   get points() {
@@ -33,23 +25,18 @@ export default class PointsModel extends Observable {
   }
 
   init = async () => {
+    const newEventBtn = document.querySelector('.trip-main__event-add-btn');
     try {
       const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
+      this.#destinations = await this.#pointsApiService.destinations;
+      this.#offers = await this.#pointsApiService.offers;
+      newEventBtn.disabled = false;
     } catch(err) {
       this.#points = [];
-    }
-
-    try {
-      this.#destinations = await this.#pointsApiService.destinations;
-    } catch(err) {
       this.#destinations = [];
-    }
-
-    try {
-      this.#offers = await this.#pointsApiService.offers;
-    } catch(err) {
       this.#offers = [];
+      newEventBtn.disabled = true;
     }
 
     this._notify(UpdateType.INIT);

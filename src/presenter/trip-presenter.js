@@ -4,6 +4,7 @@ import { filter, sortPointsDate, sortPointPrice, sortPointTime } from '../utils.
 import NewPointPresenter from './new-point-presenter.js';
 import ContentListView from '../view/content-list-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
+import ListErrorView from '../view/list-error-view.js';
 import LoadingView from '../view/loading-view.js';
 import PointPresenter from './point-presenter.js';
 import TripInfoView from '../view/trip-info-view.js';
@@ -71,13 +72,18 @@ export default class TripPresenter {
   };
 
   #renderPoints = () => {
-    for (let i = 0; i < this.points.length; i++) {
-      this.#renderPoint(this.points[i]);
+    for (const point of this.points) {
+      this.#renderPoint(point);
     }
   };
 
   #renderEmptyContentList = () => {
     this.#emptyComponent = new ListEmptyView(this.#filterType);
+    render(this.#emptyComponent, this.#contentContainer);
+  };
+
+  #renderErrorContentList = () => {
+    this.#emptyComponent = new ListErrorView();
     render(this.#emptyComponent, this.#contentContainer);
   };
 
@@ -193,6 +199,11 @@ export default class TripPresenter {
     }
 
     const pointCount = this.points.length;
+
+    if (pointCount === 0 && this.#pointsModel.offers.length === 0 && this.#pointsModel.destinations.length === 0) {
+      this.#renderErrorContentList();
+      return;
+    }
 
     if (pointCount === 0) {
       this.#renderEmptyContentList();

@@ -68,22 +68,6 @@ const getTripInfo = (pointsModel) => {
   return { pointsSequence, tripCost };
 };
 
-// const createRandomId = () => {
-//   const previousValues = [];
-//   return function () {
-//     let currentValue = getRandomInteger(MIN_ID, MAX_ID);
-//     if (previousValues.length >= (MAX_ID - MIN_ID + 1)) {
-//       // console.error(`Перебраны все ID из диапазона от ${ min } до ${ max }`);
-//       return null;
-//     }
-//     while (previousValues.includes(currentValue)) {
-//       currentValue = getRandomInteger(MIN_ID, MAX_ID);
-//     }
-//     previousValues.push(currentValue);
-//     return currentValue;
-//   };
-// };
-
 const filter = {
   [FilterType.ALL]: (points) => points,
   [FilterType.FUTURE]: (points) => points.filter((point) => dayjs().isBefore(point.dateFrom) || dayjs().isBefore(point.dateTo)),

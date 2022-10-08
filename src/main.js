@@ -17,12 +17,12 @@ const filterModel = new FilterModel();
 const tripPresenter = new TripPresenter(eventsElement, pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteFilterElement, filterModel, pointsModel);
 
-const handleNewEventFormClose = () => {
+const newEventFormCloseHandler = () => {
   newEventButton.disabled = false;
 };
 
-const handleNewEventButtonClick = () => {
-  tripPresenter.createPoint(handleNewEventFormClose);
+const newEventButtonClickHandler = () => {
+  tripPresenter.createPoint(newEventFormCloseHandler);
   newEventButton.disabled = true;
 };
 
@@ -30,5 +30,5 @@ tripPresenter.init();
 filterPresenter.init();
 pointsModel.init()
   .finally(() => {
-    newEventButton.addEventListener('click', handleNewEventButtonClick);
+    newEventButton.addEventListener('click', newEventButtonClickHandler);
   });

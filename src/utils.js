@@ -3,32 +3,6 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
-// Функция для генерации случайного числа из диапазона
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-//Функция для получения случайного массива из исходного массива
-const getRandomElementsFromArray = (arr) => {
-  const maxLength = arr.length;
-  const lengthOfArray = getRandomInteger(0, maxLength);
-  const elements = [];
-  for (let i = elements.length; i < lengthOfArray; i++) {
-    const indexOfElement = getRandomInteger(0, maxLength - 1);
-    const element = arr[indexOfElement];
-    if (!elements.includes(element)) {
-      elements.push(element);
-    }
-  }
-  return elements;
-};
-
-// функция склоняет числовые значения, взял тут https://realadmin.ru/coding/sklonenie-na-javascript.html
-const declOfNumbers = (number, words) => words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? Math.abs(number) % 10 : 5]];
-
 //Функция для расчета времени
 const humanizeDateDDMMYYHHmm = (date) => dayjs(date).format('DD/MM/YY HH:mm');
 const humanizeDateHHmm = (date) => dayjs(date).format('HH:mm');
@@ -91,7 +65,5 @@ const sortPointTime = (pointA, pointB) => (pointB.dateTo - pointB.dateFrom) - (p
 
 const sortPointPrice = (pointA, pointB) => pointB.basePrice - pointA.basePrice;
 
-export { getRandomInteger, getRandomElementsFromArray, humanizeDateHHmm,
-  humanizeDateMMMDD, humanizeDateDDMMYYHHmm, humanizeDateDDHHmm,
-  setCapitalLetter, getTripInfo, declOfNumbers,
-  sortPointsDate, sortPointTime, sortPointPrice, filter };
+export { humanizeDateHHmm, humanizeDateMMMDD, humanizeDateDDMMYYHHmm, humanizeDateDDHHmm,
+  setCapitalLetter, getTripInfo, sortPointsDate, sortPointTime, sortPointPrice, filter };

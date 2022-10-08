@@ -61,8 +61,12 @@ const editPointTemplate = (point, offersByType, destinations, cities) => {
 
   const destListTemplate = createDestinationListTemplate(destination);
 
-  // eslint-disable-next-line no-nested-ternary
-  const getResetBtnTitle = () => isNewPoint ? 'Cancel' : isDeleting ? 'Deleting...' : 'Delete';
+  const getResetBtnTitle = () => {
+    if (isNewPoint) {
+      return 'Cancel';
+    }
+    return isDeleting ? 'Deleting...' : 'Delete';
+  };
 
   return (`
     <li class="trip-events__item">
